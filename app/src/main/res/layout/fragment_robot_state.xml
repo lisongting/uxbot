@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2017 lisongting
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <cn.iscas.xlab.xbotplayer.customview.PercentCircleView
+        android:id="@+id/battery_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:background="@drawable/background"
+        app:radius="50dp"
+        app:normal_state_color="@color/colorPrimary"
+        app:mid_state_color="#ff8f00"
+        app:low_state_color="#c62828"
+        app:stroke_size="3dp"
+        app:stroke_color="@color/colorPrimary"
+        app:text_size="26sp"
+        app:text_color="@android:color/white"
+        />
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eeeeee"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/battery_view"/>
+
+    <RelativeLayout
+        android:id="@+id/layout_item1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider1"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:paddingStart="30dp"
+        >
+        <TextView
+            android:id="@+id/electric_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/colorStatePageText"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:text="电机电源"/>
+        <Switch
+            android:id="@+id/switcher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/electric_text"
+            android:theme="@style/SwitcherTheme"
+            android:checked="true"
+            />
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eeeeee"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/layout_item1"/>
+
+    <RelativeLayout
+        android:id="@+id/layout_item2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider2"
+        android:paddingStart="30dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="16dp">
+
+        <TextView
+            android:id="@+id/cloud_degree_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="云台角度"
+            android:layout_centerVertical="true"
+            android:textSize="14sp"
+            android:textColor="@color/colorStatePageText"
+            />
+
+        <cn.iscas.xlab.xbotplayer.customview.CustomSeekBar
+            android:id="@+id/seekbar_cloud_degree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_toEndOf="@id/cloud_degree_txt"
+            android:paddingLeft="10dp"
+            app:is_horizontal="true"
+            app:track_length="200dp"
+            app:track_width="5dp"
+            app:track_color="@color/colorPrimary"
+            app:indicator_radius="9dp"
+            app:indicator_color="@color/colorLightPink"
+            app:bubble_color="@color/colorPrimary"
+            app:bubble_height="20dp"
+            app:bubble_width="30dp"
+            app:bubble_text_size="12sp"
+            app:bubble_text_color="@color/colorLightPink"
+            app:min_value="-90"
+            app:max_value="90"
+            app:value_text_size="14sp"
+            app:value_text_color="@color/colorStatePageText"/>
+    </RelativeLayout>
+
+
+
+    <View
+        android:id="@+id/divider3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#eeeeee"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/layout_item2"/>
+
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:layout_marginTop="12dp"
+        android:layout_below="@id/divider3">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginEnd="40dp">
+            <cn.iscas.xlab.xbotplayer.customview.CustomSeekBar
+                android:id="@+id/seekbar_lift_height"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:is_horizontal="false"
+                app:track_length="170dp"
+                app:track_width="5dp"
+                app:track_color="@color/colorPrimary"
+                app:indicator_radius="9dp"
+                app:indicator_color="@color/colorLightPink"
+                app:bubble_color="@color/colorPrimary"
+                app:bubble_height="20dp"
+                app:bubble_width="30dp"
+                app:bubble_text_size="12sp"
+                app:bubble_text_color="@color/colorLightPink"
+                app:min_value="0"
+                app:max_value="100"
+                app:value_text_size="14sp"
+                app:value_text_color="@color/colorStatePageText"/>
+            <TextView
+                android:id="@+id/lift_height_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="升降台高度"
+                android:layout_gravity="center_horizontal"
+                android:textSize="14sp"
+                android:textColor="@color/colorStatePageText"
+                />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <cn.iscas.xlab.xbotplayer.customview.CustomSeekBar
+                android:id="@+id/seekbar_camera_degree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:is_horizontal="false"
+                app:track_length="170dp"
+                app:track_width="5dp"
+                app:track_color="@color/colorPrimary"
+                app:indicator_radius="9dp"
+                app:indicator_color="@color/colorLightPink"
+                app:bubble_color="@color/colorPrimary"
+                app:bubble_height="20dp"
+                app:bubble_width="30dp"
+                app:bubble_text_size="12sp"
+                app:bubble_text_color="@color/colorLightPink"
+                app:min_value="-45"
+                app:max_value="45"
+                app:value_text_size="14sp"
+                app:value_text_color="@color/colorStatePageText"/>
+            <TextView
+                android:id="@+id/camera_degree_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="摄像头角度"
+                android:textSize="14sp"
+                android:textColor="@color/colorStatePageText"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

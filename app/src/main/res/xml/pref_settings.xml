@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <cn.iscas.xlab.xbotplayer.preferences.RosIpPreference
+        android:key="@string/pref_key_ros_server_ip"/>
+
+    <cn.iscas.xlab.xbotplayer.preferences.SeekbarPreference
+        android:key="@string/pref_key_speed"
+        android:summary="@string/pref_speed_summary"
+        />
+
+</PreferenceScreen>
