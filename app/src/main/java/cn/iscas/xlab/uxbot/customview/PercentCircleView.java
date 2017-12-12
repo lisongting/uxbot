@@ -69,6 +69,7 @@ public class PercentCircleView extends View {
     private Path clipPath;
     private String batteryText,batteryPercent;
     private Rect batteryTextBounds,batteryPercentBounds;
+    private volatile boolean isAnimating = false;
 
     private ValueAnimator valueAnimator;
     public PercentCircleView(Context context) {
@@ -287,7 +288,11 @@ public class PercentCircleView extends View {
 
     }
 
-    public void startAnim() {
+    public synchronized void startAnimation() {
+
+        if (isAnimating) {
+            return;
+        }
         bezierStartShift = 0F;
 
         valueAnimator = ValueAnimator.ofFloat(0, peakWidth*2F);
@@ -303,13 +308,16 @@ public class PercentCircleView extends View {
         valueAnimator.setRepeatMode(ValueAnimator.RESTART);
         valueAnimator.setDuration(3000);
         valueAnimator.start();
+        isAnimating = true;
     }
 
-    public void stopAnimation() {
+    public synchronized void stopAnimation() {
         if (valueAnimator != null) {
             valueAnimator.pause();
             valueAnimator.cancel();
+            isAnimating = false;
         }
+
     }
 
     public void setPercent(int p) {
@@ -348,7 +356,7 @@ public class PercentCircleView extends View {
             //50%
             peakWidth = radius / 2F;
         }
-        startAnim();
+        startAnimation();
     }
 
     public int getPercent() {

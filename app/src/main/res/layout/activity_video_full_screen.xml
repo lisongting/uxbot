@@ -104,7 +104,7 @@
             android:layout_below="@id/info_image"/>
     </RelativeLayout>
 
-    <cn.iscas.xlab.xbotplayer.customview.RockerView
+    <cn.iscas.xlab.uxbot.customview.RockerView
         android:id="@+id/rocker_view"
         android:layout_width="130dp"
         android:layout_height="130dp"

@@ -31,7 +31,8 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
-import cn.iscas.xlab.xbotplayer.R;
+import cn.iscas.xlab.uxbot.R;
+
 
 /**
  * Created by lisongting on 2017/9/28.
@@ -300,8 +301,10 @@ public class RockerView extends View {
     }
 
     public void setAvailable(boolean available) {
-        this.isAvailable = available;
-        invalidate();
+        if (isAvailable != available) {
+            this.isAvailable = available;
+            invalidate();
+        }
     }
 
     private Bitmap drawableToBitmap(Drawable drawable) {

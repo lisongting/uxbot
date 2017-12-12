@@ -30,11 +30,11 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import cn.iscas.xlab.xbotplayer.entity.PublishEvent;
-import cn.iscas.xlab.xbotplayer.entity.RobotState;
-import cn.iscas.xlab.xbotplayer.entity.Twist;
-import cn.iscas.xlab.xbotplayer.ros.ROSClient;
-import cn.iscas.xlab.xbotplayer.ros.rosbridge.ROSBridgeClient;
+import cn.iscas.xlab.uxbot.entity.PublishEvent;
+import cn.iscas.xlab.uxbot.entity.RobotState;
+import cn.iscas.xlab.uxbot.entity.Twist;
+import cn.iscas.xlab.uxbot.ros.ROSClient;
+import cn.iscas.xlab.uxbot.ros.rosbridge.ROSBridgeClient;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -91,7 +91,7 @@ public class RosConnectionService extends Service {
                     body.put("msg", message);
 
                     rosBridgeClient.send(body.toString());
-                    //Log.v(TAG, "publish "+Constant.PUBLISH_TOPIC_CMD_MOVE+" to Ros Server :\n" + body.toString());
+                    Log.v(TAG, "publish "+Constant.PUBLISH_TOPIC_CMD_MOVE+" to Ros Server :\n" + body.toString());
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -134,20 +134,20 @@ public class RosConnectionService extends Service {
          * 发布message控制升降台高度
          * @param percent  高度百分比[0,100]
          */
-        public void sendLiftHeightMsg(int percent) {
-            JSONObject msg = new JSONObject();
-            JSONObject body = new JSONObject();
-            try {
-                msg.put("height_percent", percent);
-                body.put("op", "publish");
-                body.put("topic", Constant.PUBLISH_TOPIC_CMD_LIFT);
-                body.put("msg", msg);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            rosBridgeClient.send(body.toString());
-            //Log.v(TAG, "publish "+Constant.PUBLISH_TOPIC_CMD_LIFT+" to Ros Server :\n" + body.toString());
-        }
+//        public void sendLiftHeightMsg(int percent) {
+//            JSONObject msg = new JSONObject();
+//            JSONObject body = new JSONObject();
+//            try {
+//                msg.put("height_percent", percent);
+//                body.put("op", "publish");
+//                body.put("topic", Constant.PUBLISH_TOPIC_CMD_LIFT);
+//                body.put("msg", msg);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            rosBridgeClient.send(body.toString());
+//            //Log.v(TAG, "publish "+Constant.PUBLISH_TOPIC_CMD_LIFT+" to Ros Server :\n" + body.toString());
+//        }
 
         /**
          * 发布Message控制云台旋转角度和摄像头角度

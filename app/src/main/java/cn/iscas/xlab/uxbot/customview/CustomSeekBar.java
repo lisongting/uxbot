@@ -32,7 +32,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 
-import cn.iscas.xlab.xbotplayer.R;
+import cn.iscas.xlab.uxbot.R;
+
 
 /**
  * 自定义SeekBar，可支持水平和垂直布局

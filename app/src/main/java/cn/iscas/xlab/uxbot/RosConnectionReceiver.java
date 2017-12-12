@@ -27,12 +27,12 @@ public class RosConnectionReceiver extends BroadcastReceiver {
         Bundle data = intent.getExtras();
         switch (data.getInt(Constant.KEY_BROADCAST_ROS_CONN)) {
             case Constant.CONN_ROS_SERVER_SUCCESS:
-                rosCallback.onSuccess();
                 Config.isRosServerConnected = true;
+                rosCallback.onSuccess();
                 break;
             case Constant.CONN_ROS_SERVER_ERROR:
-                rosCallback.onFailure();
                 Config.isRosServerConnected = false;
+                rosCallback.onFailure();
                 break;
             default:
                 break;

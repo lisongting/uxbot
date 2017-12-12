@@ -22,12 +22,12 @@
         android:title="Xbot状态" />
 
     <item
-        android:id="@+id/camera"
-        android:icon="@drawable/camera"
-        android:title="摄像头" />
+        android:id="@+id/control"
+        android:icon="@drawable/rocker"
+        android:title="控制界面" />
 
     <item
-        android:id="@+id/map"
+        android:id="@+id/user"
         android:icon="@drawable/map"
         android:title="用户" />
 </menu>

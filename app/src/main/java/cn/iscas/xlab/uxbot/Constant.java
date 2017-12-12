@@ -12,7 +12,6 @@ public class Constant {
 
     public static final String PUBLISH_TOPIC_CMD_MOVE = "/cmd_vel_mux/input/teleop";
 
-    public static final String PUBLISH_TOPIC_CMD_LIFT = "/mobile_base/commands/lift";
 
     public static final String PUBLISH_TOPIC_CMD_CLOUD_CAMERA = "/mobile_base/commands/cloud_camera";
 

@@ -17,6 +17,7 @@ package cn.iscas.xlab.uxbot;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -29,7 +30,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -39,6 +39,11 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.iscas.xlab.uxbot.mvp.control.ControlFragment;
+import cn.iscas.xlab.uxbot.mvp.control.ControlPresenter;
+import cn.iscas.xlab.uxbot.mvp.robot_state.RobotStateFragment;
+import cn.iscas.xlab.uxbot.mvp.robot_state.RobotStatePresenter;
+import cn.iscas.xlab.uxbot.mvp.user.UserFragment;
 
 
 /**
@@ -52,14 +57,18 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView bottomNavigationView;
 
-    private MapFragment mapFragment;
-    private CameraFragment cameraFragment;
     private RobotStateFragment robotStateFragment;
+    private ControlFragment controlFragment;
+    private UserFragment userFragment;
+    private ControlPresenter controlPresenter;
+    private RobotStatePresenter robotStatePresenter;
+
     private long lastExitTime;
     private FragmentManager fragmentManager;
     private int selectedNavItem = 0;
     private TextView pageTitle;
     private ImageButton settingButton;
+    private RosConnectionReceiver receiver;
 
     @TargetApi(23)
     @Override
@@ -84,51 +93,55 @@ public class MainActivity extends AppCompatActivity {
         if (savedInstanceState == null) {
             log("savedInstanceState is null");
             fragmentManager = getSupportFragmentManager();
-            mapFragment = new MapFragment();
-            cameraFragment = new CameraFragment();
             robotStateFragment = new RobotStateFragment();
+            controlFragment = new ControlFragment();
+            userFragment = new UserFragment();
             fragmentManager.beginTransaction()
                     .add(R.id.container, robotStateFragment, robotStateFragment.getClass().getSimpleName())
-                    .add(R.id.container, mapFragment, mapFragment.getClass().getSimpleName())
-                    .add(R.id.container, cameraFragment, cameraFragment.getClass().getSimpleName())
+                    .add(R.id.container, controlFragment, controlFragment.getClass().getSimpleName())
+                    .add(R.id.container, userFragment, userFragment.getClass().getSimpleName())
                     .commit();
             bottomNavigationView.setSelectedItemId(R.id.robot_state);
         } else {
             log("restore savedInstanceState ");
             fragmentManager = getSupportFragmentManager();
             robotStateFragment = (RobotStateFragment) fragmentManager.getFragment(savedInstanceState, robotStateFragment.getClass().getSimpleName());
-            mapFragment = (MapFragment) fragmentManager.getFragment(savedInstanceState, mapFragment.getClass().getSimpleName());
-            cameraFragment = (CameraFragment) fragmentManager.getFragment(savedInstanceState, cameraFragment.getClass().getSimpleName());
+            controlFragment = (ControlFragment) fragmentManager.getFragment(savedInstanceState, controlFragment.getClass().getSimpleName());
+            userFragment = (UserFragment) fragmentManager.getFragment(savedInstanceState, userFragment.getClass().getSimpleName());
             selectedNavItem = savedInstanceState.getInt(KEY_NAV_ITEM);
             switch (selectedNavItem) {
                 case 0:
                     bottomNavigationView.setSelectedItemId(R.id.robot_state);
                     break;
                 case 1:
-                    bottomNavigationView.setSelectedItemId(R.id.camera);
+                    bottomNavigationView.setSelectedItemId(R.id.control);
                     break;
                 case 2:
-                    bottomNavigationView.setSelectedItemId(R.id.map);
+                    bottomNavigationView.setSelectedItemId(R.id.user);
                     break;
                 default:
                     break;
             }
         }
-        ColorStateList list = new ColorStateList(new int[][]{
-                {android.R.attr.state_checked},
-                {android.R.attr.state_enabled},
-        }, new int[]{
-                getResources().getColor(R.color.colorPrimary, null),
-                Color.GRAY
-        });
+        //将Presenter与View关联起来
+        controlPresenter = new ControlPresenter(this, controlFragment);
+        robotStatePresenter = new RobotStatePresenter(this, robotStateFragment);
+
+        //更改底部tab按钮选中的颜色
+        ColorStateList list = new ColorStateList(
+                new int[][]{{android.R.attr.state_checked}, {android.R.attr.state_enabled}},
+                new int[]{getResources().getColor(R.color.colorPrimary, null), Color.GRAY});
         bottomNavigationView.setItemIconTintList(list);
         bottomNavigationView.setItemTextColor(list);
+
+
+        initBroadcastReceiver();
     }
 
     private void initConfiguration() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
         Config.ROS_SERVER_IP = sp.getString(getResources().getString(R.string.pref_key_ros_server_ip), "192.168.0.135");
-        Config.speed = sp.getInt(getResources().getString(R.string.pref_key_speed),30) / 100.0;
+        Config.speed = sp.getInt(getResources().getString(R.string.pref_key_speed), 30) / 100.0;
         log("初始设置：" + Config.ROS_SERVER_IP + " ," + Config.speed);
     }
 
@@ -145,42 +158,36 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     private void initListeners() {
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                log("onNavigationItemSelected():"+item.getItemId());
+                log("onNavigationItemSelected():" + item.getItemId());
                 switch (item.getItemId()) {
                     case R.id.robot_state:
                         pageTitle.setText("Xbot状态");
-                        mapFragment.hideLoading();
                         fragmentManager.beginTransaction()
-                                .hide(cameraFragment)
-                                .hide(mapFragment)
+                                .hide(controlFragment)
+                                .hide(userFragment)
                                 .show(robotStateFragment)
                                 .commit();
                         selectedNavItem = 0;
-//                        bottomNavigationView.setForeground();
-//                        bottomNavigationView.setItemIconTintList();
                         break;
-                    case R.id.camera:
-                        pageTitle.setText("摄像头");
-                        mapFragment.hideLoading();
+                    case R.id.control:
+                        pageTitle.setText("控制界面");
                         fragmentManager.beginTransaction()
-                                .hide(mapFragment)
+                                .hide(userFragment)
                                 .hide(robotStateFragment)
-                                .show(cameraFragment)
+                                .show(controlFragment)
                                 .commit();
                         selectedNavItem = 1;
                         break;
-                    case R.id.map:
-                        pageTitle.setText("2D地图");
-                        mapFragment.hideLoading();
+                    case R.id.user:
+                        pageTitle.setText("用户");
                         fragmentManager.beginTransaction()
-                                .hide(cameraFragment)
+                                .hide(controlFragment)
                                 .hide(robotStateFragment)
-                                .show(mapFragment)
+                                .show(userFragment)
                                 .commit();
                         selectedNavItem = 2;
                         break;
@@ -200,6 +207,32 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private void initBroadcastReceiver() {
+        receiver = new RosConnectionReceiver(new RosConnectionReceiver.RosCallback() {
+            @Override
+            public void onSuccess() {
+                Toast.makeText(MainActivity.this, "Ros服务端连接成功", Toast.LENGTH_SHORT).show();
+                App app = (App) getApplication();
+                robotStatePresenter.setServiceProxy(app.getRosServiceProxy());
+                robotStatePresenter.subscribeRobotState();
+                controlPresenter.setServiceProxy(app.getRosServiceProxy());
+                robotStateFragment.notifyRosConnectionStateChange(true);
+                controlFragment.notifyRosConnectionStateChange(true);
+            }
+
+            @Override
+            public void onFailure() {
+                robotStateFragment.notifyRosConnectionStateChange(false);
+                controlFragment.notifyRosConnectionStateChange(false);
+
+            }
+        });
+
+        IntentFilter filter = new IntentFilter(Constant.ROS_RECEIVER_INTENTFILTER);
+        registerReceiver(receiver,filter);
+
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         log("onSaveInstanceState()");
@@ -207,17 +240,17 @@ public class MainActivity extends AppCompatActivity {
         if (robotStateFragment.isAdded()) {
             fragmentManager.putFragment(outState, robotStateFragment.getClass().getSimpleName(), robotStateFragment);
         }
-        if (mapFragment.isAdded()) {
-            fragmentManager.putFragment(outState, mapFragment.getClass().getSimpleName(), mapFragment);
+        if (controlFragment.isAdded()) {
+            fragmentManager.putFragment(outState, controlFragment.getClass().getSimpleName(), controlFragment);
         }
-        if (cameraFragment.isAdded()) {
-            fragmentManager.putFragment(outState, cameraFragment.getClass().getSimpleName(), cameraFragment);
+        if (userFragment.isAdded()) {
+            fragmentManager.putFragment(outState, userFragment.getClass().getSimpleName(), userFragment);
         }
         outState.putInt(KEY_NAV_ITEM, selectedNavItem);
 
     }
 
-    private int getStatusBarHeight(){
+    private int getStatusBarHeight() {
         int height = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
@@ -226,30 +259,13 @@ public class MainActivity extends AppCompatActivity {
         return height;
     }
 
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        log("onRestoreInstanceState()");
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.menu_setting,menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        return true;
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == MotionEvent.ACTION_DOWN) {
             if (System.currentTimeMillis() - lastExitTime < 2000) {
                 finish();
-            }else{
+            } else {
                 Toast.makeText(this, "再按一次返回键退出程序", Toast.LENGTH_SHORT).show();
                 lastExitTime = System.currentTimeMillis();
             }
@@ -262,6 +278,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         log("onDestroy()");
         super.onDestroy();
+        unregisterReceiver(receiver);
     }
 
     private void log(String s) {
