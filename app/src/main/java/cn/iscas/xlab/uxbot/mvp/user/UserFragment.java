@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import cn.iscas.xlab.uxbot.R;
+import cn.iscas.xlab.uxbot.mvp.user.register.RegisterFragment;
 import cn.iscas.xlab.uxbot.mvp.user.userlist.UserListActivity;
 
 /**
@@ -19,6 +20,7 @@ import cn.iscas.xlab.uxbot.mvp.user.userlist.UserListActivity;
 public class UserFragment extends Fragment {
 
     private Button btUserList,btRegister,btRecognize;
+    private RegisterFragment registerFragment;
 
     public UserFragment() {
 
@@ -27,8 +29,8 @@ public class UserFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-//        View v = inflater.inflate(R.layout.fragment_user, container, false);
-        View v = inflater.inflate(R.layout.fragment_user, null);
+        View v = inflater.inflate(R.layout.fragment_user, container, false);
+//        View v = inflater.inflate(R.layout.fragment_user, null);
 
         btUserList = v.findViewById(R.id.bt_user_list);
         btRecognize = v.findViewById(R.id.bt_recognize);
@@ -38,11 +40,22 @@ public class UserFragment extends Fragment {
         return v;
     }
 
+
     private void initListeners() {
         btUserList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getContext(), UserListActivity.class));
+            }
+        });
+
+        btRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                registerFragment = new RegisterFragment();
+                getFragmentManager().beginTransaction()
+                        .add(registerFragment, "registerFragment")
+                        .commit();
             }
         });
     }

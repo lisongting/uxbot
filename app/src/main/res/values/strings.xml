@@ -30,4 +30,14 @@
     <string name="text_retry">加载失败，点击重试</string>
     <string name="load_fail_check_config">请检查网络配置或服务器配置</string>
 
+    <string name="register_hint">请输入你的姓名</string>
+
+    <string name="register_capture_image">采集头像</string>
+
+    <string name="cancel">取消</string>
+    <string name="camera_shoot">拍照</string>
+    <string name="button_retry">重拍</string>
+    <string name="button_ok">确认注册</string>
+    <string name="button_home">返回主界面</string>
+
 </resources>

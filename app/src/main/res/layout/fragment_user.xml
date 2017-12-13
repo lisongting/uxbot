@@ -1,26 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    >
 
     <Button
         android:id="@+id/bt_user_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="查看已注册用户列表"/>
-
+        android:text="查看已注册用户列表"
+        />
 
     <Button
         android:id="@+id/bt_register"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="人脸注册"/>
+        android:text="人脸注册"
+        android:layout_below="@id/bt_user_list"/>
 
     <Button
         android:id="@+id/bt_recognize"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/bt_register"
         android:text="人脸识别"/>
 
-</LinearLayout>
+    <FrameLayout
+        android:id="@+id/center_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true">
+    </FrameLayout>
+
+
+</RelativeLayout>
