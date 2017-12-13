@@ -65,7 +65,6 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
 
     @Override
     public void initView() {
-        log("isRosServerConnected:" + Config.isRosServerConnected);
         if (Config.isRosServerConnected) {
             batteryView.startAnimation();
         } else {
@@ -153,7 +152,6 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
 
     //当Ros服务器连接状态变化时，从外部通知该Fragment
     public void notifyRosConnectionStateChange(boolean isConnected) {
-        log("notify:" + isConnected);
         if (isConnected) {
             batteryView.startAnimation();
         } else {

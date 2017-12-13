@@ -22,8 +22,6 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.squareup.leakcanary.LeakCanary;
-
 /**
  * Created by lisongting on 2017/10/9.
  */
@@ -58,8 +56,7 @@ public class App extends Application {
 
         Intent intent = new Intent(this, RosConnectionService.class);
         bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
-
-        LeakCanary.install(this);
+        
     }
 
     public RosConnectionService.ServiceBinder getRosServiceProxy(){

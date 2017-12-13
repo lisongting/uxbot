@@ -160,7 +160,6 @@ public class ControlFragment extends Fragment implements ControlContract.View {
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-//        initBroadcastReceiver();
         super.onActivityCreated(savedInstanceState);
 
     }
@@ -176,28 +175,6 @@ public class ControlFragment extends Fragment implements ControlContract.View {
         }
         initOnClickListeners();
     }
-
-//    private void initBroadcastReceiver() {
-//        receiver = new RosConnectionReceiver(new RosConnectionReceiver.RosCallback() {
-//            @Override
-//            public void onSuccess() {
-//                rockerView.setAvailable(true);
-//                if (!Config.isRosServerConnected) {
-//                    Toast.makeText(getContext(), "Ros服务端连接成功", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure() {
-//                rockerView.setAvailable(false);
-//                Config.isRosServerConnected = false;
-//            }
-//        });
-//
-//        IntentFilter filter = new IntentFilter(Constant.ROS_RECEIVER_INTENTFILTER);
-//        getActivity().registerReceiver(receiver,filter);
-//
-//    }
 
     private void initOnClickListeners() {
         surfaceView.setOnClickListener(new View.OnClickListener() {
@@ -329,7 +306,6 @@ public class ControlFragment extends Fragment implements ControlContract.View {
 
             @Override
             public void onDirectionChange(RockerView.Direction direction) {
-//                log("当前的摇杆方向：" + direction.name());
                 if (!Config.isRosServerConnected) {
                     return;
                 }
@@ -517,7 +493,6 @@ public class ControlFragment extends Fragment implements ControlContract.View {
         if (presenter != null) {
             presenter.destroy();
         }
-//        getActivity().unregisterReceiver(receiver);
     }
 
     private void log(String string) {

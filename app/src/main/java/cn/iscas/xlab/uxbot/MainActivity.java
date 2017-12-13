@@ -44,6 +44,7 @@ import cn.iscas.xlab.uxbot.mvp.control.ControlPresenter;
 import cn.iscas.xlab.uxbot.mvp.robot_state.RobotStateFragment;
 import cn.iscas.xlab.uxbot.mvp.robot_state.RobotStatePresenter;
 import cn.iscas.xlab.uxbot.mvp.user.UserFragment;
+import cn.iscas.xlab.uxbot.util.Util;
 
 
 /**
@@ -84,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         //获取状态栏高度，显示一个占位的View(该view和actionbar颜色相同)，达到沉浸式状态栏效果
         View status_bar = findViewById(R.id.status_bar_view);
         ViewGroup.LayoutParams params = status_bar.getLayoutParams();
-        params.height = getStatusBarHeight();
+        params.height = Util.getStatusBarHeight(this);
         status_bar.setLayoutParams(params);
 
         initListeners();
@@ -248,15 +249,6 @@ public class MainActivity extends AppCompatActivity {
         }
         outState.putInt(KEY_NAV_ITEM, selectedNavItem);
 
-    }
-
-    private int getStatusBarHeight() {
-        int height = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            height = getResources().getDimensionPixelSize(resourceId);
-        }
-        return height;
     }
 
 
