@@ -124,7 +124,14 @@ public class ImageUtils {
         return ret;
     }
 
-    //将Bitmap转为Base64编码
+
+    /**
+     * 将Bitmap转为Base64编码
+     * @param image 图片
+     * @param compressFormat  图片格式：JPEG,PNG等
+     * @param quality 0-100，100表示最好
+     * @return  图片的base64字符串
+     */
     public static String encodeBitmapToBase64(Bitmap image, Bitmap.CompressFormat compressFormat, int quality)
     {
         ByteArrayOutputStream byteArrayOS = new ByteArrayOutputStream();

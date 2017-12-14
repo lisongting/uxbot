@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -72,6 +73,7 @@ public class UserListActivity extends AppCompatActivity implements UserListContr
 
         userListAdapter = new UserListAdapter(this);
         recyclerView.setAdapter(userListAdapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary,R.color.colorPrimaryDark,R.color.colorLightPink);
@@ -110,7 +112,7 @@ public class UserListActivity extends AppCompatActivity implements UserListContr
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 userListAdapter.setDeleteMode(false);
-                                //presenter.deleteUser(Util.makeUserNameToHex(name));
+                                presenter.deleteUser(Util.makeUserNameToHex(name));
                             }
                         })
                         .setCancelable(false)
@@ -162,6 +164,10 @@ public class UserListActivity extends AppCompatActivity implements UserListContr
         }
     }
 
+    public void removeUser(String name){
+        userListAdapter.removeUser(name);
+    }
+
     @Override
     public void showRefreshError() {
         swipeRefreshLayout.setRefreshing(false);
@@ -176,7 +182,7 @@ public class UserListActivity extends AppCompatActivity implements UserListContr
     @Override
     public void showInfo(String s) {
         Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
-        presenter.requestUserData();
+       // presenter.requestUserData();
     }
 
     @Override

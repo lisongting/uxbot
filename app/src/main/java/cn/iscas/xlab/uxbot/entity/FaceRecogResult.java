@@ -32,6 +32,8 @@ public class FaceRecogResult {
     @SerializedName("Ret")
     private int ret;
 
+    public FaceRecogResult(){}
+
     public float getConfidence() {
         return confidence;
     }

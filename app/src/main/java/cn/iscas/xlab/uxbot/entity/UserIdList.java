@@ -30,6 +30,10 @@ public class UserIdList {
     @SerializedName("Userids")
     private List<String> userList;
 
+    public UserIdList() {
+
+    }
+
     public int getRet() {
         return ret;
     }

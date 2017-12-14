@@ -4,10 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 import cn.iscas.xlab.uxbot.R;
 import cn.iscas.xlab.uxbot.mvp.user.register.RegisterFragment;
@@ -19,7 +19,7 @@ import cn.iscas.xlab.uxbot.mvp.user.userlist.UserListActivity;
 
 public class UserFragment extends Fragment {
 
-    private Button btUserList,btRegister,btRecognize;
+    private CardView btUserList,btRegister,btRecognize;
     private RegisterFragment registerFragment;
 
     public UserFragment() {

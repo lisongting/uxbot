@@ -78,6 +78,19 @@ public class UserListAdapter extends RecyclerView.Adapter<UserListAdapter.UserIt
         notifyDataSetChanged();
     }
 
+    public void removeUser(String name) {
+        int pos;
+        int size = userInfoList.size();
+        for(int i=0;i<size;i++) {
+            if (userInfoList.get(i).getName().equals(name)) {
+                pos = i;
+                userInfoList.remove(pos);
+                notifyDataSetChanged();
+                break;
+            }
+        }
+    }
+
     public boolean getDeleteMode() {
         return isDeleteButtonOn;
     }

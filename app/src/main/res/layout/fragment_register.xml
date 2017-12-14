@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:hint="@string/register_hint"
+                android:text="测试名"
                 android:inputType="textPersonName"
                 android:textSize="16sp" />
 

@@ -12,11 +12,15 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import cn.iscas.xlab.uxbot.R;
+import cn.iscas.xlab.uxbot.util.RegexCheckUtil;
 
 /**
  * Created by lisongting on 2017/12/13.
+ * 用来提示用户输入姓名
  */
 
 public class RegisterFragment extends DialogFragment {
@@ -24,6 +28,7 @@ public class RegisterFragment extends DialogFragment {
     private Window window;
     public RegisterFragment(){}
     private Button btCapture,btCancel;
+    private TextView textView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,7 +43,7 @@ public class RegisterFragment extends DialogFragment {
         View v = inflater.inflate(R.layout.fragment_register, container, false);
         btCapture = v.findViewById(R.id.id_bt_camera);
         btCancel = v.findViewById(R.id.id_bt_cancel);
-
+        textView = v.findViewById(R.id.id_textView);
         window = getDialog().getWindow();
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         if (window != null) {
@@ -66,8 +71,15 @@ public class RegisterFragment extends DialogFragment {
         btCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                dismiss();
-                startActivity(new Intent(getContext(), CameraActivity.class));
+                String userName = textView.getEditableText().toString();
+                if (RegexCheckUtil.isRightPersonName(userName)) {
+                    dismiss();
+                    Intent intent = new Intent(getContext(), CameraActivity.class);
+                    intent.putExtra("userName", userName);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(getContext(), "请输入正确的姓名", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

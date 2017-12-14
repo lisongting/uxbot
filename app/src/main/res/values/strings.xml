@@ -28,7 +28,7 @@
 
     <string name="text_loading">加载中，请稍候</string>
     <string name="text_retry">加载失败，点击重试</string>
-    <string name="load_fail_check_config">请检查网络配置或服务器配置</string>
+    <string name="load_fail_check_config">请检查网络或服务器配置</string>
 
     <string name="register_hint">请输入你的姓名</string>
 

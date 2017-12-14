@@ -33,7 +33,27 @@ public class UserRegisterResult {
     @SerializedName("Ret")
     private int ret ;
 
+    public String getStrImage() {
+        return strImage;
+    }
 
+    public void setStrImage(String strImage) {
+        this.strImage = strImage;
+    }
 
+    public int getRet() {
+        return ret;
+    }
 
+    public void setRet(int ret) {
+        this.ret = ret;
+    }
+
+    @Override
+    public String toString() {
+        return "UserRegisterResult{" +
+                "strImage='" + strImage + '\'' +
+                ", ret=" + ret +
+                '}';
+    }
 }

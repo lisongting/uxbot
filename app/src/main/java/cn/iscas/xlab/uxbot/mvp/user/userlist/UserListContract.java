@@ -21,6 +21,8 @@ public interface UserListContract {
         void hideLoading();
 
         void showInfo(String s);
+
+        void removeUser(String id);
     }
 
     interface Presenter extends BasePresenter {
