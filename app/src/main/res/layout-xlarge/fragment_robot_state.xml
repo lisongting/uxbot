@@ -159,7 +159,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_toEndOf="@id/camera_degree_txt"
-            android:paddingLeft="10dp"
+            android:paddingLeft="8dp"
             app:is_horizontal="true"
             app:track_length="400dp"
             app:track_width="8dp"
