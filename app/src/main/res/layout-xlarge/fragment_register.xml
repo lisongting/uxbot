@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="人脸注册"
-            android:textSize="20sp"
+            android:textSize="30sp"
             android:textColor="@color/colorPrimaryDark"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="50dp"
@@ -33,18 +33,18 @@
             android:id="@+id/id_text_input_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="100dp"
+            android:layout_marginBottom="150dp"
             android:layout_below="@id/tv_register"
             android:layout_gravity="center"
             >
             <EditText
                 android:id="@+id/id_textView"
-                android:layout_width="200dp"
+                android:layout_width="300dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:hint="@string/register_hint"
                 android:inputType="textPersonName"
-                android:textSize="16sp" />
+                android:textSize="20sp" />
 
         </android.support.design.widget.TextInputLayout>
 
@@ -58,8 +58,8 @@
                 android:id="@+id/id_bt_camera"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:layout_margin="4dp"
+                android:textSize="20sp"
+                android:layout_margin="8dp"
                 android:text="@string/register_capture_image"
                 android:background="@drawable/bt_background"
                 />
@@ -68,8 +68,8 @@
                 android:id="@+id/id_bt_cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
-                android:layout_margin="4dp"
+                android:textSize="20sp"
+                android:layout_margin="8dp"
                 android:text="@string/cancel"
                 android:background="@drawable/bt_background"
                 />

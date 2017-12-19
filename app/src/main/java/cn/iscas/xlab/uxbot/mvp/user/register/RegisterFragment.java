@@ -59,7 +59,11 @@ public class RegisterFragment extends DialogFragment {
         WindowManager manager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(metrics);
-        window.setLayout((int) (metrics.widthPixels*0.7), (int) (metrics.heightPixels*0.5));
+        if (metrics.heightPixels < 2000) {
+            window.setLayout((int) (metrics.widthPixels * 0.7), (int) (metrics.heightPixels * 0.5));
+        } else {
+            window.setLayout((int) (metrics.widthPixels * 0.5), (int) (metrics.heightPixels * 0.4));
+        }
 
         btCancel.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/bt_user_list"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        app:cardElevation="5dp"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@color/colorPrimaryDark">
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="20dp"
+            android:text="查看已注册用户列表"
+            />
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/bt_register"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        app:cardElevation="5dp"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@color/colorPrimaryDark"
+        android:layout_below="@id/bt_user_list">
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="20dp"
+            android:text="人脸注册"
+            />
+
+    </android.support.v7.widget.CardView>
+
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/bt_recognize"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        app:cardElevation="5dp"
+        app:cardCornerRadius="20dp"
+        app:cardBackgroundColor="@color/colorPrimaryDark"
+        android:layout_below="@id/bt_register">
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textSize="20dp"
+            android:text="人脸识别"
+
+            />
+    </android.support.v7.widget.CardView>
+
+    <!--<Button-->
+        <!--android:id="@+id/bt_user_list"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:visibility="invisible"-->
+        <!--android:text="查看已注册用户列表"-->
+        <!--/>-->
+
+    <!--<Button-->
+        <!--android:id="@+id/bt_register"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="人脸注册"-->
+        <!--android:visibility="invisible"-->
+        <!--android:layout_below="@id/bt_user_list"/>-->
+
+    <!--<Button-->
+        <!--android:id="@+id/bt_recognize"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:visibility="invisible"-->
+        <!--android:layout_below="@id/bt_register"-->
+        <!--android:text="人脸识别"/>-->
+
+    <!--<FrameLayout-->
+        <!--android:id="@+id/center_layout"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerInParent="true">-->
+    <!--</FrameLayout>-->
+
+
+</RelativeLayout>

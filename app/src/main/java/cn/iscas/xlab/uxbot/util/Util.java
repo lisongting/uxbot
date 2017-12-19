@@ -2,7 +2,9 @@ package cn.iscas.xlab.uxbot.util;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.DisplayMetrics;
 import android.util.Size;
+import android.view.WindowManager;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -97,6 +99,13 @@ public class Util {
             height = resources.getDimensionPixelSize(resourceId);
         }
         return height;
+    }
+
+    public static boolean isLargeDevice(Context context) {
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(displayMetrics);
+        return displayMetrics.heightPixels > 2000;
     }
 
 }

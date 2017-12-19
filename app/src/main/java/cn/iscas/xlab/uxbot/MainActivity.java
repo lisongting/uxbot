@@ -106,9 +106,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             log("restore savedInstanceState ");
             fragmentManager = getSupportFragmentManager();
-            robotStateFragment = (RobotStateFragment) fragmentManager.getFragment(savedInstanceState, robotStateFragment.getClass().getSimpleName());
-            controlFragment = (ControlFragment) fragmentManager.getFragment(savedInstanceState, controlFragment.getClass().getSimpleName());
-            userFragment = (UserFragment) fragmentManager.getFragment(savedInstanceState, userFragment.getClass().getSimpleName());
+            robotStateFragment = (RobotStateFragment) fragmentManager.findFragmentByTag(RobotStateFragment.class.getSimpleName());
+            controlFragment = (ControlFragment) fragmentManager.findFragmentByTag(ControlFragment.class.getSimpleName());
+            userFragment = (UserFragment) fragmentManager.findFragmentByTag(UserFragment.class.getSimpleName());
             selectedNavItem = savedInstanceState.getInt(KEY_NAV_ITEM);
             switch (selectedNavItem) {
                 case 0:

@@ -19,7 +19,7 @@
     <item
         android:id="@+id/robot_state"
         android:icon="@drawable/robot"
-        android:title="Xbot状态" />
+        android:title="状态" />
 
     <item
         android:id="@+id/control"

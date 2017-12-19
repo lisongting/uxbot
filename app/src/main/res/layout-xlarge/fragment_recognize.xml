@@ -8,7 +8,6 @@
         android:id="@+id/texture_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
     <cn.iscas.xlab.uxbot.customview.FaceOverlayView
         android:id="@+id/face_overlay_view"
         android:layout_width="match_parent"

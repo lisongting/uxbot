@@ -215,6 +215,7 @@ public class CameraActivity extends AppCompatActivity implements RegisterContrac
         public void onOpened(@NonNull CameraDevice camera) {
             log( "CameraDevice.StateCallback -- onOpened()");
             mCameraDevice = camera;
+            //在切换前后摄像头时，会触发onOpen方法，如果这里textureview可用，则开启预览
             if (mTextureView.isAvailable()) {
                 takePreview();
             }

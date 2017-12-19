@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cn.iscas.xlab.uxbot.R;
+import cn.iscas.xlab.uxbot.mvp.user.recognize.RecogActivity;
 import cn.iscas.xlab.uxbot.mvp.user.register.RegisterFragment;
 import cn.iscas.xlab.uxbot.mvp.user.userlist.UserListActivity;
 
@@ -56,6 +57,12 @@ public class UserFragment extends Fragment {
                 getFragmentManager().beginTransaction()
                         .add(registerFragment, "registerFragment")
                         .commit();
+            }
+        });
+        btRecognize.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), RecogActivity.class));
             }
         });
     }

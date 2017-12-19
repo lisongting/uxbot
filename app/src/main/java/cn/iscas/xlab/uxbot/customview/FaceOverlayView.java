@@ -1,7 +1,19 @@
-// Copyright (c) Philipp Wagner. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-package cn.ac.iscas.xlab.droidfacedog.custom_views;
+/*
+ * Copyright 2017 lisongting
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package cn.iscas.xlab.uxbot.customview;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,17 +21,15 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.RectF;
+import android.support.annotation.Nullable;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.view.Surface;
 import android.view.View;
 
-import cn.ac.iscas.xlab.droidfacedog.entity.FaceResult;
-import cn.ac.iscas.xlab.droidfacedog.util.ImageUtils;
-
-/**
- * Created by Nguyen on 5/20/2016.
- */
+import cn.iscas.xlab.uxbot.entity.FaceData;
+import cn.iscas.xlab.uxbot.util.ImageUtils;
 
 /**
  * This class is a simple View to display the faces.
@@ -28,16 +38,21 @@ public class FaceOverlayView extends View {
 
     private Paint mPaint;
     private Paint mTextPaint;
-    private int mDisplayOrientation;
+    private int mDisplayOrientation =0;
     private int mOrientation;
     private int previewWidth;
     private int previewHeight;
-    private FaceResult[] mFaces;
-    private double fps;
-    private boolean isFront = false;
+    private FaceData[] mFaces;
+
+    private DisplayMetrics displayMetrics;
 
     public FaceOverlayView(Context context) {
         super(context);
+        initialize();
+    }
+
+    public FaceOverlayView(Context context, @Nullable AttributeSet attrs) {
+        super(context,attrs);
         initialize();
     }
 
@@ -61,14 +76,10 @@ public class FaceOverlayView extends View {
         mTextPaint.setColor(Color.GREEN);
         mTextPaint.setStyle(Paint.Style.FILL);
 
-
+        displayMetrics = new DisplayMetrics();
     }
 
-    public void setFPS(double fps) {
-        this.fps = fps;
-    }
-
-    public void setFaces(FaceResult[] faces) {
+    public void setFaces(FaceData[] faces) {
         mFaces = faces;
         invalidate();
     }
@@ -86,7 +97,6 @@ public class FaceOverlayView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         if (mFaces != null && mFaces.length > 0) {
-
             float scaleX = (float) getWidth() / (float) previewWidth;
             float scaleY = (float) getHeight() / (float) previewHeight;
             switch (mDisplayOrientation) {
@@ -100,26 +110,17 @@ public class FaceOverlayView extends View {
             canvas.save();
             canvas.rotate(-mOrientation);
 
-            for (FaceResult face : mFaces) {
-                PointF mid = new PointF();
-                face.getMidPoint(mid);
+            for (FaceData face : mFaces) {
+                PointF mid;
+                mid = face.getMidEye();
                 if (mid.x != 0.0f && mid.y != 0.0f) {
                     float eyesDis = face.eyesDistance();
                     RectF rectF = ImageUtils.getDrawFaceRectF(mid,eyesDis,scaleX,scaleY);
-
                     canvas.drawRect(rectF, mPaint);
-//                    canvas.drawText("ID " + face.getId(), rectF.left, rectF.bottom + mTextPaint.getTextSize(), mTextPaint);
-//                    canvas.drawText("Confidence " + face.getConfidence(), rectF.left, rectF.bottom + mTextPaint.getTextSize() * 2, mTextPaint);
-//                    canvas.drawText("EyesDistance " + face.eyesDistance(), rectF.left, rectF.bottom + mTextPaint.getTextSize() * 3, mTextPaint);
                 }
             }
             canvas.restore();
         }
-
-
-
-//        DecimalFormat df2 = new DecimalFormat(".##");
-//        canvas.drawText("Detected_Frame/s: " + df2.format(fps) + " @ " + previewWidth + "x" + previewHeight, mTextPaint.getTextSize(), mTextPaint.getTextSize(), mTextPaint);
     }
 
     public void setPreviewWidth(int previewWidth) {
@@ -128,9 +129,5 @@ public class FaceOverlayView extends View {
 
     public void setPreviewHeight(int previewHeight) {
         this.previewHeight = previewHeight;
-    }
-
-    public void setFront(boolean front) {
-        isFront = front;
     }
 }

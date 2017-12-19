@@ -101,7 +101,7 @@
         </RelativeLayout>
     </RelativeLayout>
 
-    <cn.iscas.xlab.xbotplayer.customview.RockerView
+    <cn.iscas.xlab.uxbot.customview.RockerView
         android:id="@+id/rocker_view"
         android:layout_width="180dp"
         android:layout_height="180dp"
