@@ -171,8 +171,8 @@
             app:bubble_width="60dp"
             app:bubble_text_size="20sp"
             app:bubble_text_color="@color/colorLightPink"
-            app:min_value="-90"
-            app:max_value="90"
+            app:min_value="-45"
+            app:max_value="45"
             app:value_text_size="20sp"
             app:value_text_color="@color/colorStatePageText"/>
 
