@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -44,6 +45,7 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
     private CustomSeekBar cameraDegreeSeekBar;
     private RobotStateContract.Presenter presenter;
     private Switch switcher;
+    private Button btReset;
 
     public RobotStateFragment() {
 
@@ -57,6 +59,7 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
         cloudDegreeSeekBar =  view.findViewById(R.id.seekbar_cloud_degree);
         cameraDegreeSeekBar =  view.findViewById(R.id.seekbar_camera_degree);
         switcher =  view.findViewById(R.id.switcher);
+        btReset = view.findViewById(R.id.bt_reset);
 
         initListeners();
 
@@ -119,6 +122,18 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
                     Toast.makeText(getContext(), "Ros服务器未连接", Toast.LENGTH_SHORT).show();
                 }
 
+            }
+        });
+
+        btReset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                if (presenter != null) {
+//                    presenter.reset();
+//                }
+                switcher.setChecked(true);
+                cameraDegreeSeekBar.setValue(0);
+                cloudDegreeSeekBar.setValue(0);
             }
         });
 
