@@ -128,9 +128,9 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
         btReset.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                if (presenter != null) {
-//                    presenter.reset();
-//                }
+                if (presenter != null) {
+                    presenter.reset();
+                }
                 switcher.setChecked(true);
                 cameraDegreeSeekBar.setValue(0);
                 cloudDegreeSeekBar.setValue(0);
