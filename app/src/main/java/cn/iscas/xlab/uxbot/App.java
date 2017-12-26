@@ -22,6 +22,9 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechUtility;
+
 /**
  * Created by lisongting on 2017/10/9.
  */
@@ -56,7 +59,9 @@ public class App extends Application {
 
         Intent intent = new Intent(this, RosConnectionService.class);
         bindService(intent, mServiceConnection, BIND_AUTO_CREATE);
-        
+
+        SpeechUtility.createUtility(this, SpeechConstant.APPID + "=" + Constant.IFLY_TECH_APPID);
+
     }
 
     public RosConnectionService.ServiceBinder getRosServiceProxy(){

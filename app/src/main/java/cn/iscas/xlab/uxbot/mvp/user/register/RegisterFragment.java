@@ -13,10 +13,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import cn.iscas.xlab.uxbot.R;
-import cn.iscas.xlab.uxbot.util.RegexCheckUtil;
 
 /**
  * Created by lisongting on 2017/12/13.
@@ -75,15 +73,16 @@ public class RegisterFragment extends DialogFragment {
         btCapture.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String userName = textView.getEditableText().toString();
-                if (RegexCheckUtil.isRightPersonName(userName)) {
+                //todo 临时去除
+//                String userName = textView.getEditableText().toString();
+//                if (RegexCheckUtil.isRightPersonName(userName)) {
                     dismiss();
                     Intent intent = new Intent(getContext(), CameraActivity.class);
-                    intent.putExtra("userName", userName);
+//                    intent.putExtra("userName", userName);
                     startActivity(intent);
-                } else {
-                    Toast.makeText(getContext(), "请输入正确的姓名", Toast.LENGTH_SHORT).show();
-                }
+//                } else {
+//                    Toast.makeText(getContext(), "请输入正确的姓名", Toast.LENGTH_SHORT).show();
+//                }
             }
         });
     }

@@ -35,19 +35,26 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.iflytek.cloud.IdentityListener;
+import com.iflytek.cloud.IdentityResult;
+import com.iflytek.cloud.IdentityVerifier;
+import com.iflytek.cloud.InitListener;
+import com.iflytek.cloud.SpeechConstant;
+import com.iflytek.cloud.SpeechError;
+
 import java.lang.ref.SoftReference;
 import java.lang.ref.WeakReference;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import cn.iscas.xlab.uxbot.R;
-import cn.iscas.xlab.uxbot.util.ImageUtils;
 import cn.iscas.xlab.uxbot.util.Util;
 
 import static android.view.View.GONE;
 
 /**
  * Created by lisongting on 2017/12/14.
+ * 用来进行人脸注册
  */
 
 public class CameraActivity extends AppCompatActivity implements RegisterContract.View{
@@ -71,6 +78,9 @@ public class CameraActivity extends AppCompatActivity implements RegisterContrac
     private RegisterContract.Presenter presenter;
     private boolean isPreviewing = true;
     private int cameraFacingMode;
+
+    //科大讯飞人脸识别类
+    private IdentityVerifier identityVerifier;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -96,6 +106,14 @@ public class CameraActivity extends AppCompatActivity implements RegisterContrac
         initCamera();
 
         initOnClickListener();
+
+        identityVerifier = IdentityVerifier.createVerifier(getBaseContext(), new InitListener() {
+            @Override
+            public void onInit(int i) {
+                Log.i("test","IdentityVerifier -- oInit:" + i);
+            }
+        });
+
     }
 
     @Override
@@ -147,8 +165,51 @@ public class CameraActivity extends AppCompatActivity implements RegisterContrac
             @Override
             public void onClick(View v) {
                 String userName = getIntent().getStringExtra("userName");
-                presenter.register(Util.makeUserNameToHex(userName),
-                        ImageUtils.encodeBitmapToBase64(bitmapSoftReference.get(), Bitmap.CompressFormat.JPEG, 100));
+                //优图人脸注册
+//                presenter.register(Util.makeUserNameToHex(userName),
+//                        ImageUtils.encodeBitmapToBase64(bitmapSoftReference.get(), Bitmap.CompressFormat.JPEG, 100));
+
+                IdentityListener identityListener = new IdentityListener() {
+                    @Override
+                    public void onResult(IdentityResult identityResult, boolean b) {
+                        Log.i("test", "IdentityListener -- onResult: " + identityResult.getResultString() + " " + b);
+                    }
+
+                    @Override
+                    public void onError(SpeechError speechError) {
+                        Log.i("test", "IdentityListener -- onError: " + speechError.getErrorDescription());
+                    }
+
+                    @Override
+                    public void onEvent(int i, int i1, int i2, Bundle bundle) {
+                        Log.i("test", "IdentityListener -- onEvent: " + i + ", " + i1 + ", " + i2);
+                    }
+                };
+
+                //创建组
+                //创建成功: id 3588979238
+//                identityVerifier.setParameter(SpeechConstant.MFV_SCENES, "ipt");
+//                identityVerifier.setParameter(SpeechConstant.AUTH_ID, "111111");
+//                String param1 = "scope=group,group_name=group";
+//                identityVerifier.execute("ipt", "add",param1, identityListener);
+
+                //加入组
+                identityVerifier.setParameter(SpeechConstant.PARAMS, null);
+                identityVerifier.setParameter(SpeechConstant.MFV_SCENES, "ipt");
+                identityVerifier.setParameter(SpeechConstant.AUTH_ID, "111111");
+                String param2 = "auth_id=111111,scope=person,group_id=3588979238";
+                identityVerifier.execute("ipt", "add", param2, identityListener);
+
+
+
+//                identityVerifier.startWorking(identityListener);
+//                ByteArrayOutputStream bos = new ByteArrayOutputStream();
+//                bitmapSoftReference.get().compress(Bitmap.CompressFormat.JPEG, 100, bos);
+//                byte[] bytes = bos.toByteArray();
+//                identityVerifier.writeData("ifr", null, bytes, 0, bytes.length);
+//                identityVerifier.stopWrite("ifr");
+
+
             }
         });
 

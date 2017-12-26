@@ -40,5 +40,9 @@ public class Constant {
     public static final int VIDEO_TYPE_RGB = 0;
     public static final int VIDEO_TYPE_DEPTH = 1;
 
+    public static final String IFLY_TECH_APPID = "59198461";
+
+    public static final String IFLY_FACE_GROUP_ID = "";
+
 
 }

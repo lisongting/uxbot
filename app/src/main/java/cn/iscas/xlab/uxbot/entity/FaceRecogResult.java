@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by lisongting on 2017/12/12.
- * 用户人脸识别的返回结果
+ * 用户人脸识别的返回结果[优图盒子]
  *
  * 请求接口：
  * [POST]  http://IP:8000/recognition

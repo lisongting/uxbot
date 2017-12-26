@@ -54,7 +54,7 @@ public class RecogActivity extends AppCompatActivity {
         } else {
             recogFragment = (RecogFragment) getSupportFragmentManager().findFragmentByTag("recogFragment");
         }
-        presenter = new RecogPresenter(recogFragment);
+        presenter = new RecogPresenter(this,recogFragment);
 
 
         initView();

@@ -11,11 +11,12 @@ public interface RegisterContract {
 
     interface Presenter extends BasePresenter{
         /**
-         * 进行人脸注册
+         * 进行人脸注册[优图盒子]
          * @param userId  用户中文名的十六进制形式
          * @param strBitmap  人脸图片的base64字符串
          */
         void register(String userId, String  strBitmap);
+
 
     }
 

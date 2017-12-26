@@ -39,6 +39,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.iflytek.cloud.IdentityListener;
+import com.iflytek.cloud.IdentityResult;
+import com.iflytek.cloud.SpeechError;
+
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -374,8 +378,24 @@ public class RecogFragment extends Fragment implements RecogContract.View{
                             }else if (tmpFrameCount == 3) {
                                 faceBitmap = ImageUtils.cropFace(faces[0], RGBFace);
                                 if (!alertDialog.isShowing()) {
-                                    presenter.recognize(
-                                            ImageUtils.encodeBitmapToBase64(faceBitmap, Bitmap.CompressFormat.JPEG,100));
+//                                    presenter.recognize(
+//                                            ImageUtils.encodeBitmapToBase64(faceBitmap, Bitmap.CompressFormat.JPEG,100));
+                                    presenter.recognizeIFly(faceBitmap, new IdentityListener() {
+                                        @Override
+                                        public void onResult(IdentityResult identityResult, boolean b) {
+                                            Log.i("test","IdentityListener -- onResult: " + identityResult.getResultString() + " " + b);
+                                        }
+
+                                        @Override
+                                        public void onError(SpeechError speechError) {
+                                            Log.i("test","IdentityListener -- onError: " + speechError.getErrorDescription());
+                                        }
+
+                                        @Override
+                                        public void onEvent(int i, int i1, int i2, Bundle bundle) {
+                                            Log.i("test","IdentityListener -- onEvent: " + i + ", " + i1 + ", " + i2);
+                                        }
+                                    });
                                     getActivity().runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
