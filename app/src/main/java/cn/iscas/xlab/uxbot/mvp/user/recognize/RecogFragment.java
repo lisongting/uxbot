@@ -39,9 +39,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.iflytek.cloud.IdentityListener;
 import com.iflytek.cloud.IdentityResult;
 import com.iflytek.cloud.SpeechError;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -53,6 +57,7 @@ import java.util.TimerTask;
 import cn.iscas.xlab.uxbot.R;
 import cn.iscas.xlab.uxbot.customview.FaceOverlayView;
 import cn.iscas.xlab.uxbot.entity.FaceData;
+import cn.iscas.xlab.uxbot.entity.FaceRecogResultFly;
 import cn.iscas.xlab.uxbot.util.ImageUtils;
 import cn.iscas.xlab.uxbot.util.Util;
 
@@ -384,6 +389,21 @@ public class RecogFragment extends Fragment implements RecogContract.View{
                                         @Override
                                         public void onResult(IdentityResult identityResult, boolean b) {
                                             Log.i("test","IdentityListener -- onResult: " + identityResult.getResultString() + " " + b);
+                                            String json = identityResult.getResultString();
+                                            JSONObject object = null;
+                                            try {
+                                                object = new JSONObject(json);
+                                            } catch (JSONException e) {
+                                                e.printStackTrace();
+                                                return;
+                                            }
+                                            if (object.optInt("ret") == 0) {
+                                                Gson gson = new Gson();
+                                                FaceRecogResultFly recogResultFly = gson.fromJson(json, FaceRecogResultFly.class);
+                                                String userId = recogResultFly.getIfv_result().getCandidates().get(0).getUser();
+                                                Toast.makeText(getContext(), "识别结果："+Util.hexStringToString(userId), Toast.LENGTH_SHORT).show();
+                                            }
+
                                         }
 
                                         @Override

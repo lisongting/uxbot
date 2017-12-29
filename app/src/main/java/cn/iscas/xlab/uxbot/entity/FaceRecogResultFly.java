@@ -1,5 +1,7 @@
 package cn.iscas.xlab.uxbot.entity;
 
+import java.util.List;
+
 /**
  * Created by lisongting on 2017/12/25.
  */
@@ -9,25 +11,21 @@ public class FaceRecogResultFly {
 
     /**
      * ret : 0
-     * face_score : 99.999
-     * voice_score : 0
+     * group_id : 3588979238
+     * group_name : group
+     * ifv_result : {"candidates":[{"model_id":"6deae78b4ce205436f3a614a4d736301","decision":"accepted","score":88.896492,"user":"e69d8ee69dbee5bbb7"}]}
+     * sst : identify
      * ssub : ifr
-     * decision : accepted
-     * fusion_score : 99.999
-     * sst : verify
+     * topc : 1
      */
 
     private int ret;
-
-    //人脸验证的得分（验证时返回）
-    private double face_score;
-
-    //
-    private int voice_score;
-    private String ssub;
-    private String decision;
-    private double fusion_score;
+    private String group_id;
+    private String group_name;
+    private IfvResultBean ifv_result;
     private String sst;
+    private String ssub;
+    private int topc;
 
     public int getRet() {
         return ret;
@@ -37,20 +35,36 @@ public class FaceRecogResultFly {
         this.ret = ret;
     }
 
-    public double getFace_score() {
-        return face_score;
+    public String getGroup_id() {
+        return group_id;
     }
 
-    public void setFace_score(double face_score) {
-        this.face_score = face_score;
+    public void setGroup_id(String group_id) {
+        this.group_id = group_id;
     }
 
-    public int getVoice_score() {
-        return voice_score;
+    public String getGroup_name() {
+        return group_name;
     }
 
-    public void setVoice_score(int voice_score) {
-        this.voice_score = voice_score;
+    public void setGroup_name(String group_name) {
+        this.group_name = group_name;
+    }
+
+    public IfvResultBean getIfv_result() {
+        return ifv_result;
+    }
+
+    public void setIfv_result(IfvResultBean ifv_result) {
+        this.ifv_result = ifv_result;
+    }
+
+    public String getSst() {
+        return sst;
+    }
+
+    public void setSst(String sst) {
+        this.sst = sst;
     }
 
     public String getSsub() {
@@ -61,27 +75,69 @@ public class FaceRecogResultFly {
         this.ssub = ssub;
     }
 
-    public String getDecision() {
-        return decision;
+    public int getTopc() {
+        return topc;
     }
 
-    public void setDecision(String decision) {
-        this.decision = decision;
+    public void setTopc(int topc) {
+        this.topc = topc;
     }
 
-    public double getFusion_score() {
-        return fusion_score;
-    }
+    public static class IfvResultBean {
+        private List<CandidatesBean> candidates;
 
-    public void setFusion_score(double fusion_score) {
-        this.fusion_score = fusion_score;
-    }
+        public List<CandidatesBean> getCandidates() {
+            return candidates;
+        }
 
-    public String getSst() {
-        return sst;
-    }
+        public void setCandidates(List<CandidatesBean> candidates) {
+            this.candidates = candidates;
+        }
 
-    public void setSst(String sst) {
-        this.sst = sst;
+        public static class CandidatesBean {
+            /**
+             * model_id : 6deae78b4ce205436f3a614a4d736301
+             * decision : accepted
+             * score : 88.896492
+             * user : e69d8ee69dbee5bbb7
+             */
+
+            private String model_id;
+            private String decision;
+            private double score;
+            private String user;
+
+            public String getModel_id() {
+                return model_id;
+            }
+
+            public void setModel_id(String model_id) {
+                this.model_id = model_id;
+            }
+
+            public String getDecision() {
+                return decision;
+            }
+
+            public void setDecision(String decision) {
+                this.decision = decision;
+            }
+
+            public double getScore() {
+                return score;
+            }
+
+            public void setScore(double score) {
+                this.score = score;
+            }
+
+            public String getUser() {
+                return user;
+            }
+
+            public void setUser(String user) {
+                this.user = user;
+            }
+        }
     }
 }

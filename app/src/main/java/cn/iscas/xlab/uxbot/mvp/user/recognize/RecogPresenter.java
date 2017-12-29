@@ -125,6 +125,7 @@ public class RecogPresenter implements RecogContract.Presenter {
     @Override
     public void recognizeIFly(Bitmap b, IdentityListener listener) {
 
+
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         b.compress(Bitmap.CompressFormat.JPEG, 100, bos);
         byte[] data = bos.toByteArray();

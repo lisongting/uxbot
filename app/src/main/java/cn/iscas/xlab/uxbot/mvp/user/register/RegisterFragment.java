@@ -74,11 +74,11 @@ public class RegisterFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 //todo 临时去除
-//                String userName = textView.getEditableText().toString();
+                String userName = textView.getEditableText().toString();
 //                if (RegexCheckUtil.isRightPersonName(userName)) {
                     dismiss();
                     Intent intent = new Intent(getContext(), CameraActivity.class);
-//                    intent.putExtra("userName", userName);
+                    intent.putExtra("userName", userName);
                     startActivity(intent);
 //                } else {
 //                    Toast.makeText(getContext(), "请输入正确的姓名", Toast.LENGTH_SHORT).show();

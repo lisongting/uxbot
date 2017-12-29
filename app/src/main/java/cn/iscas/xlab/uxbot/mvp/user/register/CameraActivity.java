@@ -173,6 +173,7 @@ public class CameraActivity extends AppCompatActivity implements RegisterContrac
                     @Override
                     public void onResult(IdentityResult identityResult, boolean b) {
                         Log.i("test", "IdentityListener -- onResult: " + identityResult.getResultString() + " " + b);
+                        Toast.makeText(CameraActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -194,14 +195,19 @@ public class CameraActivity extends AppCompatActivity implements RegisterContrac
 //                identityVerifier.execute("ipt", "add",param1, identityListener);
 
                 //加入组
+                String userHexString = Util.makeUserNameToHex(userName);
                 identityVerifier.setParameter(SpeechConstant.PARAMS, null);
                 identityVerifier.setParameter(SpeechConstant.MFV_SCENES, "ipt");
-                identityVerifier.setParameter(SpeechConstant.AUTH_ID, "111111");
-                String param2 = "auth_id=111111,scope=person,group_id=3588979238";
+                identityVerifier.setParameter(SpeechConstant.AUTH_ID, userHexString);
+                String param2 = "auth_id="+userHexString+",scope=person,group_id=3588979238";
                 identityVerifier.execute("ipt", "add", param2, identityListener);
 
 
-
+                //注册人脸
+//                identityVerifier.setParameter(SpeechConstant.PARAMS, null);
+//                identityVerifier.setParameter(SpeechConstant.MFV_SCENES, "ifr");
+//                identityVerifier.setParameter(SpeechConstant.MFV_SST, "enroll");
+//                identityVerifier.setParameter(SpeechConstant.AUTH_ID, userHexString);
 //                identityVerifier.startWorking(identityListener);
 //                ByteArrayOutputStream bos = new ByteArrayOutputStream();
 //                bitmapSoftReference.get().compress(Bitmap.CompressFormat.JPEG, 100, bos);
