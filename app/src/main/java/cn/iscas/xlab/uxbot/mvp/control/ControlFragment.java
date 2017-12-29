@@ -29,27 +29,19 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import cn.iscas.xlab.uxbot.Config;
 import cn.iscas.xlab.uxbot.Constant;
 import cn.iscas.xlab.uxbot.R;
-import cn.iscas.xlab.uxbot.RosConnectionReceiver;
 import cn.iscas.xlab.uxbot.customview.RockerView;
 import cn.iscas.xlab.uxbot.entity.Twist;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
@@ -62,20 +54,16 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 public class ControlFragment extends Fragment implements ControlContract.View {
 
     public static final String TAG = "ControlFragment";
-    private RosConnectionReceiver receiver;
     private SurfaceView surfaceView;
     private RelativeLayout topBar,bottomBar,infoView;
-    private ImageButton btPlayState,btFullScreen,btVideoList;
+    private ImageButton btPlayState,btFullScreen;
     private RockerView rockerView;
-    private ListView listView;
     private ImageView infoImage;
     private TextView infoText;
     private TextView title;
 
     private ControlContract.Presenter presenter;
-    private SimpleAdapter simpleAdapter;
     private String[] videoList = {"彩色图像","深度图像"};
-    private List<Map<String,String>> listData;
     private boolean isMenuOpened ;
     private boolean isLoadingFailed;
     private boolean isPlaying;
@@ -88,7 +76,6 @@ public class ControlFragment extends Fragment implements ControlContract.View {
     private String rtmpAddress;
     private Handler handler;
     private String videoTitle ;
-    private int videoIndex = 0;
 
     //用于隐藏菜单
     private static final int MSG_FLAG_HIDEN_MENU = 1;
@@ -97,14 +84,12 @@ public class ControlFragment extends Fragment implements ControlContract.View {
 
     public ControlFragment() {
         rockerTwist = new Twist();
-        rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
         handler = new Handler(new Handler.Callback() {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == MSG_FLAG_HIDEN_MENU && topBar.getVisibility() == View.VISIBLE) {
                     topBar.setVisibility(View.GONE);
                     bottomBar.setVisibility(View.GONE);
-                    listView.setVisibility(View.GONE);
                     isMenuOpened = false;
                 } else if (msg.what == MSG_FLAG_LOADING && infoView.getVisibility() == View.VISIBLE) {
                     showLoadingFailed();
@@ -117,6 +102,7 @@ public class ControlFragment extends Fragment implements ControlContract.View {
         isMenuOpened = true;
         isPlaying = false;
         videoTitle = videoList[0];
+
     }
 
     @Override
@@ -128,8 +114,6 @@ public class ControlFragment extends Fragment implements ControlContract.View {
         infoView = (RelativeLayout) v.findViewById(R.id.info_view);
         btPlayState = (ImageButton) v.findViewById(R.id.ib_play_state);
         btFullScreen = (ImageButton) v.findViewById(R.id.ib_screen_state);
-        btVideoList = (ImageButton) v.findViewById(R.id.ib_list);
-        listView = (ListView) v.findViewById(R.id.list_view);
         rockerView = (RockerView) v.findViewById(R.id.rocker_view);
         infoImage = (ImageView)v.findViewById(R.id.info_image);
         infoText = (TextView) v.findViewById(R.id.info_text);
@@ -142,17 +126,6 @@ public class ControlFragment extends Fragment implements ControlContract.View {
 
     @Override
     public void initView() {
-        listData = new ArrayList<>();
-        for(int i=0;i<videoList.length;i++) {
-            Map<String, String> map = new HashMap<>();
-            map.put("text", videoList[i]);
-            listData.add(map);
-        }
-
-        simpleAdapter = new SimpleAdapter(getContext(), listData, R.layout.video_list_item,
-                new String[]{"text"}, new int[]{R.id.item_text});
-        listView.setAdapter(simpleAdapter);
-
         waitAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.watting_anim);
         waitAnimation.setInterpolator(new LinearInterpolator());
 
@@ -188,7 +161,6 @@ public class ControlFragment extends Fragment implements ControlContract.View {
                 } else {
                     topBar.setVisibility(View.GONE);
                     bottomBar.setVisibility(View.GONE);
-                    listView.setVisibility(View.GONE);
                     handler.removeMessages(MSG_FLAG_HIDEN_MENU);
                 }
                 isMenuOpened = !isMenuOpened;
@@ -199,11 +171,7 @@ public class ControlFragment extends Fragment implements ControlContract.View {
             @Override
             public void onClick(View v) {
                 if (isLoadingFailed) {
-                    if (videoIndex == 0) {
-                        rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
-                    } else {
-                        rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_DEPTH_RTMP_SUFFIX;
-                    }
+                    rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
                     play(rtmpAddress);
                     showLoading();
                     isLoadingFailed = false;
@@ -211,28 +179,6 @@ public class ControlFragment extends Fragment implements ControlContract.View {
             }
         });
 
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                StringBuilder addr = new StringBuilder("rtmp://");
-
-                if (position == 0) {
-                    addr.append(Config.ROS_SERVER_IP).append(Constant.CAMERA_RGB_RTMP_SUFFIX);
-                    videoIndex = 0;
-                } else {
-                    addr.append(Config.ROS_SERVER_IP).append(Constant.CAMERA_DEPTH_RTMP_SUFFIX);
-                    videoIndex = 1;
-                }
-                videoTitle = videoList[videoIndex];
-                //如果选择的播放视频源与正在播放的不相同则开始播放，如果相同，则不播放
-                if (!rtmpAddress.equals(addr.toString())) {
-                    rtmpAddress = addr.toString();
-                    showLoading();
-                    play(rtmpAddress);
-                }
-            }
-        });
 
         btPlayState.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -248,11 +194,7 @@ public class ControlFragment extends Fragment implements ControlContract.View {
                 } else {
                     //开始/恢复播放
                     showLoading();
-                    if (videoIndex == 0) {
-                        rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
-                    } else {
-                        rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_DEPTH_RTMP_SUFFIX;
-                    }
+                    rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
                     play(rtmpAddress);
                 }
 
@@ -263,11 +205,6 @@ public class ControlFragment extends Fragment implements ControlContract.View {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(),FullScreenVideoActivity.class);
-                if (rtmpAddress.endsWith(Constant.CAMERA_RGB_RTMP_SUFFIX)) {
-                    intent.putExtra("video_type",Constant.VIDEO_TYPE_RGB);
-                } else if (rtmpAddress.endsWith(Constant.CAMERA_DEPTH_RTMP_SUFFIX)) {
-                    intent.putExtra("video_type", Constant.VIDEO_TYPE_DEPTH);
-                }
                 intent.putExtra("isPlaying", isPlaying);
 
                 if (mediaPlayer != null) {
@@ -283,16 +220,6 @@ public class ControlFragment extends Fragment implements ControlContract.View {
 
         });
 
-        btVideoList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listView.getVisibility() == View.GONE) {
-                    listView.setVisibility(View.VISIBLE);
-                } else if(listView.getVisibility()== View.VISIBLE){
-                    listView.setVisibility(View.GONE);
-                }
-            }
-        });
 
         rockerView.setOnDirectionChangeListener(new RockerView.OnDirectionChangeListener() {
             @Override
@@ -358,19 +285,12 @@ public class ControlFragment extends Fragment implements ControlContract.View {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data != null) {
-            int type = data.getIntExtra("video_type", -1);
             isPlaying = data.getBooleanExtra("isPlaying", false);
-            if (type == Constant.VIDEO_TYPE_RGB) {
-                rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
-                videoIndex = 0;
-            } else if (type ==Constant.VIDEO_TYPE_DEPTH) {
-                rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_DEPTH_RTMP_SUFFIX;
-                videoIndex = 1;
-            }
-            title.setText(videoList[videoIndex]);
+            title.setText(videoList[0]);
         }
         if (isPlaying) {
             showLoading();
+            rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
             play(rtmpAddress);
         } else {
             btPlayState.setBackgroundResource(R.drawable.ic_play);

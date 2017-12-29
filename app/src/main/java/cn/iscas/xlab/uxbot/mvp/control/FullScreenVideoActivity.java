@@ -17,20 +17,13 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
-import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -53,17 +46,14 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
     private static final String TAG = "VideoActivity";
     private SurfaceView surfaceView;
     private RelativeLayout topBar,bottomBar,infoView;
-    private ImageButton btPlayState,btFullScreen,btVideoList,btBack,btRockerSwitch;
+    private ImageButton btPlayState,btFullScreen,btBack,btRockerSwitch;
     private RockerView rockerView;
-    private ListView listView;
     private ImageView infoImage;
     private TextView infoText;
     private TextView title;
 
     private ControlContract.Presenter presenter;
-    private SimpleAdapter simpleAdapter;
     private String[] videoList = {"彩色图像","深度图像"};
-    private List<Map<String,String>> listData;
     private boolean isMenuOpened ;
     private boolean isLoadingFailed;
     private boolean isPlaying;
@@ -77,7 +67,6 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
     private Handler handler;
     private String videoTitle ;
     private SurfaceHolder holder;
-    private int videoIndex = 0;
 
     //用于隐藏菜单
     private static final int MSG_FLAG_HIDEN_MENU = 1;
@@ -98,8 +87,6 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
         infoView = (RelativeLayout) findViewById(R.id.info_view);
         btPlayState = (ImageButton) findViewById(R.id.ib_play_state);
         btFullScreen = (ImageButton) findViewById(R.id.ib_screen_state);
-        btVideoList = (ImageButton) findViewById(R.id.ib_list);
-        listView = (ListView) findViewById(R.id.list_view);
         rockerView = (RockerView) findViewById(R.id.rocker_view);
         infoImage = (ImageView) findViewById(R.id.info_image);
         infoText = (TextView) findViewById(R.id.info_text);
@@ -107,15 +94,8 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
         btBack = (ImageButton) findViewById(R.id.ib_back);
         btRockerSwitch = (ImageButton) findViewById(R.id.rocker_switch);
 
-        int type = getIntent().getIntExtra("video_type", -1);
         isPlaying = getIntent().getBooleanExtra("isPlaying", false);
-        if (type == Constant.VIDEO_TYPE_RGB) {
-            rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
-            videoTitle = videoList[0];
-        } else if (type ==Constant.VIDEO_TYPE_DEPTH) {
-            rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_DEPTH_RTMP_SUFFIX;
-            videoTitle = videoList[1];
-        }
+        videoTitle = videoList[0];
         title.setText(videoTitle);
 
         rockerTwist = new Twist();
@@ -125,7 +105,6 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
                 if (msg.what == MSG_FLAG_HIDEN_MENU && topBar.getVisibility() == View.VISIBLE) {
                     topBar.setVisibility(View.GONE);
                     bottomBar.setVisibility(View.GONE);
-                    listView.setVisibility(View.GONE);
                     isMenuOpened = false;
                 } else if (msg.what == MSG_FLAG_LOADING && infoView.getVisibility() == View.VISIBLE) {
                     showLoadingFailed();
@@ -142,16 +121,6 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
 
     @Override
     public void initView() {
-        listData = new ArrayList<>();
-        for(int i=0;i<videoList.length;i++) {
-            Map<String, String> map = new HashMap<>();
-            map.put("text", videoList[i]);
-            listData.add(map);
-        }
-
-        simpleAdapter = new SimpleAdapter(this, listData, R.layout.video_list_item,
-                new String[]{"text"}, new int[]{R.id.item_text});
-        listView.setAdapter(simpleAdapter);
 
         waitAnimation = AnimationUtils.loadAnimation(this, R.anim.watting_anim);
         waitAnimation.setInterpolator(new LinearInterpolator());
@@ -173,6 +142,7 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
         initOnClickListeners();
         if (isPlaying) {
             showLoading();
+            rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
             play(rtmpAddress);
         } else {
             btPlayState.setBackgroundResource(R.drawable.ic_play);
@@ -215,7 +185,6 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
                 } else {
                     topBar.setVisibility(View.GONE);
                     bottomBar.setVisibility(View.GONE);
-                    listView.setVisibility(View.GONE);
                     handler.removeMessages(MSG_FLAG_HIDEN_MENU);
                 }
                 isMenuOpened = !isMenuOpened;
@@ -244,11 +213,7 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
             @Override
             public void onClick(View v) {
                 if (isLoadingFailed) {
-                    if (videoIndex == 0) {
-                        rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
-                    } else {
-                        rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_DEPTH_RTMP_SUFFIX;
-                    }
+                    rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
                     play(rtmpAddress);
                     showLoading();
                     isLoadingFailed = false;
@@ -256,26 +221,6 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
             }
         });
 
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                StringBuilder addr = new StringBuilder("rtmp://");
-
-                if (position == 0) {
-                    addr.append(Config.ROS_SERVER_IP).append(Constant.CAMERA_RGB_RTMP_SUFFIX);
-                } else {
-                    addr.append(Config.ROS_SERVER_IP).append(Constant.CAMERA_DEPTH_RTMP_SUFFIX);
-                }
-                videoTitle = videoList[videoIndex];
-                //如果选择的播放视频源与正在播放的不相同则开始播放，如果相同，则不播放
-                if (!rtmpAddress.equals(addr.toString())) {
-                    rtmpAddress = addr.toString();
-                    showLoading();
-                    play(rtmpAddress);
-                }
-            }
-        });
 
         btPlayState.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -292,11 +237,7 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
                 } else {
                     //开始/恢复播放
                     showLoading();
-                    if (videoIndex == 0) {
-                        rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
-                    } else {
-                        rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_DEPTH_RTMP_SUFFIX;
-                    }
+                    rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
                     play(rtmpAddress);
                 }
 
@@ -312,16 +253,6 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
 
         });
 
-        btVideoList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (listView.getVisibility() == View.GONE) {
-                    listView.setVisibility(View.VISIBLE);
-                } else if(listView.getVisibility()== View.VISIBLE){
-                    listView.setVisibility(View.GONE);
-                }
-            }
-        });
 
         rockerView.setOnDirectionChangeListener(new RockerView.OnDirectionChangeListener() {
             @Override
@@ -412,13 +343,7 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
                     hideLoading();
                     isPlaying = true;
                     btPlayState.setBackgroundResource(R.drawable.ic_pause);
-                    if (rtmpAddress.endsWith(Constant.CAMERA_RGB_RTMP_SUFFIX)) {
-                        videoIndex = 0;
-                        videoTitle = videoList[0];
-                    }else if (rtmpAddress.endsWith(Constant.CAMERA_DEPTH_RTMP_SUFFIX)) {
-                        videoIndex = 1;
-                        videoTitle = videoList[1];
-                    }
+                    videoTitle = videoList[0];
                     title.setText(videoTitle);
 //                    log("ijkMediaPlayer onInfo:" + i + " , " + i1);
                 }
@@ -483,11 +408,6 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
 
     private void setResultData() {
         Intent intent = new Intent();
-        if (rtmpAddress.endsWith(Constant.CAMERA_RGB_RTMP_SUFFIX)) {
-            intent.putExtra("video_type",Constant.VIDEO_TYPE_RGB);
-        } else if (rtmpAddress.endsWith(Constant.CAMERA_DEPTH_RTMP_SUFFIX)) {
-            intent.putExtra("video_type", Constant.VIDEO_TYPE_DEPTH);
-        }
         intent.putExtra("isPlaying", isPlaying);
         setResult(0, intent);
     }

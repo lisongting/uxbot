@@ -35,33 +35,17 @@
             android:text="彩色图像"/>
 
         <ImageButton
-            android:id="@+id/ib_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:background="@drawable/ic_list"/>
-
-        <ImageButton
             android:id="@+id/rocker_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleX="0.8"
             android:scaleY="0.8"
             android:background="@drawable/ic_rocker_on"
-            android:layout_toLeftOf="@id/ib_list"
+            android:layout_alignParentRight="true"
             android:layout_marginEnd="20dp"/>
 
 
     </RelativeLayout>
-
-    <ListView
-        android:id="@+id/list_view"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/top_bar"
-        android:layout_alignParentEnd="true"
-        android:visibility="gone"
-        />
 
     <RelativeLayout
         android:id="@+id/bottom_bar"
