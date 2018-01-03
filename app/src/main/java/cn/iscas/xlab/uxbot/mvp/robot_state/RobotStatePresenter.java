@@ -91,6 +91,14 @@ public class RobotStatePresenter implements RobotStateContract.Presenter {
 
     }
 
+    public void reset() {
+        if (serviceProxy == null) {
+            Log.e(TAG,"serviceProxy is null");
+            return;
+        }
+        serviceProxy.sendCloudCameraMsg(0, 0);
+    }
+
     @Override
     public void destroy(){
         EventBus.getDefault().unregister(this);

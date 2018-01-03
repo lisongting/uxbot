@@ -42,6 +42,8 @@ public interface RobotStateContract {
         void publishElectricMachineryMsg(boolean activate);
 
         void destroy();
+
+        void reset();
     }
 
 

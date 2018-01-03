@@ -188,4 +188,15 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/layout_item3"/>
 
+    <Button
+        android:id="@+id/bt_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="重置"
+        android:layout_margin="20dp"
+        android:textSize="12sp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bt_background"
+        />
+
 </RelativeLayout>

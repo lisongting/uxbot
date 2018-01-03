@@ -26,8 +26,8 @@
         android:icon="@drawable/rocker"
         android:title="控制" />
 
-    <item
-        android:id="@+id/user"
-        android:icon="@drawable/user"
-        android:title="用户" />
+    <!--<item-->
+        <!--android:id="@+id/user"-->
+        <!--android:icon="@drawable/user"-->
+        <!--android:title="用户" />-->
 </menu>

@@ -43,7 +43,6 @@ import cn.iscas.xlab.uxbot.mvp.control.ControlFragment;
 import cn.iscas.xlab.uxbot.mvp.control.ControlPresenter;
 import cn.iscas.xlab.uxbot.mvp.robot_state.RobotStateFragment;
 import cn.iscas.xlab.uxbot.mvp.robot_state.RobotStatePresenter;
-import cn.iscas.xlab.uxbot.mvp.user.UserFragment;
 import cn.iscas.xlab.uxbot.util.Util;
 
 
@@ -60,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
     private RobotStateFragment robotStateFragment;
     private ControlFragment controlFragment;
-    private UserFragment userFragment;
+//    private UserFragment userFragment;
     private ControlPresenter controlPresenter;
     private RobotStatePresenter robotStatePresenter;
 
@@ -96,19 +95,23 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager = getSupportFragmentManager();
             robotStateFragment = new RobotStateFragment();
             controlFragment = new ControlFragment();
-            userFragment = new UserFragment();
+//            userFragment = new UserFragment();
+//            fragmentManager.beginTransaction()
+//                    .add(R.id.container, robotStateFragment, robotStateFragment.getClass().getSimpleName())
+//                    .add(R.id.container, controlFragment, controlFragment.getClass().getSimpleName())
+//                    .add(R.id.container, userFragment, userFragment.getClass().getSimpleName())
+//                    .commit();
             fragmentManager.beginTransaction()
-                    .add(R.id.container, robotStateFragment, robotStateFragment.getClass().getSimpleName())
-                    .add(R.id.container, controlFragment, controlFragment.getClass().getSimpleName())
-                    .add(R.id.container, userFragment, userFragment.getClass().getSimpleName())
-                    .commit();
-            bottomNavigationView.setSelectedItemId(R.id.user);
+                .add(R.id.container, robotStateFragment, robotStateFragment.getClass().getSimpleName())
+                .add(R.id.container, controlFragment, controlFragment.getClass().getSimpleName())
+                .commit();
+            bottomNavigationView.setSelectedItemId(R.id.robot_state);
         } else {
             log("restore savedInstanceState ");
             fragmentManager = getSupportFragmentManager();
             robotStateFragment = (RobotStateFragment) fragmentManager.findFragmentByTag(RobotStateFragment.class.getSimpleName());
             controlFragment = (ControlFragment) fragmentManager.findFragmentByTag(ControlFragment.class.getSimpleName());
-            userFragment = (UserFragment) fragmentManager.findFragmentByTag(UserFragment.class.getSimpleName());
+//            userFragment = (UserFragment) fragmentManager.findFragmentByTag(UserFragment.class.getSimpleName());
             selectedNavItem = savedInstanceState.getInt(KEY_NAV_ITEM);
             switch (selectedNavItem) {
                 case 0:
@@ -116,9 +119,6 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case 1:
                     bottomNavigationView.setSelectedItemId(R.id.control);
-                    break;
-                case 2:
-                    bottomNavigationView.setSelectedItemId(R.id.user);
                     break;
                 default:
                     break;
@@ -169,7 +169,6 @@ public class MainActivity extends AppCompatActivity {
                         pageTitle.setText("Xbot状态");
                         fragmentManager.beginTransaction()
                                 .hide(controlFragment)
-                                .hide(userFragment)
                                 .show(robotStateFragment)
                                 .commit();
                         selectedNavItem = 0;
@@ -177,20 +176,10 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.control:
                         pageTitle.setText("控制界面");
                         fragmentManager.beginTransaction()
-                                .hide(userFragment)
                                 .hide(robotStateFragment)
                                 .show(controlFragment)
                                 .commit();
                         selectedNavItem = 1;
-                        break;
-                    case R.id.user:
-                        pageTitle.setText("用户");
-                        fragmentManager.beginTransaction()
-                                .hide(controlFragment)
-                                .hide(robotStateFragment)
-                                .show(userFragment)
-                                .commit();
-                        selectedNavItem = 2;
                         break;
                     default:
                         break;
@@ -206,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        
     }
 
     private void initBroadcastReceiver() {
@@ -244,9 +234,9 @@ public class MainActivity extends AppCompatActivity {
         if (controlFragment.isAdded()) {
             fragmentManager.putFragment(outState, controlFragment.getClass().getSimpleName(), controlFragment);
         }
-        if (userFragment.isAdded()) {
-            fragmentManager.putFragment(outState, userFragment.getClass().getSimpleName(), userFragment);
-        }
+//        if (userFragment.isAdded()) {
+//            fragmentManager.putFragment(outState, userFragment.getClass().getSimpleName(), userFragment);
+//        }
         outState.putInt(KEY_NAV_ITEM, selectedNavItem);
 
     }
