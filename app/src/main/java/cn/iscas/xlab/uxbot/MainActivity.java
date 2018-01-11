@@ -59,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
 
     private RobotStateFragment robotStateFragment;
     private ControlFragment controlFragment;
-//    private UserFragment userFragment;
     private ControlPresenter controlPresenter;
     private RobotStatePresenter robotStatePresenter;
 
@@ -95,12 +94,7 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager = getSupportFragmentManager();
             robotStateFragment = new RobotStateFragment();
             controlFragment = new ControlFragment();
-//            userFragment = new UserFragment();
-//            fragmentManager.beginTransaction()
-//                    .add(R.id.container, robotStateFragment, robotStateFragment.getClass().getSimpleName())
-//                    .add(R.id.container, controlFragment, controlFragment.getClass().getSimpleName())
-//                    .add(R.id.container, userFragment, userFragment.getClass().getSimpleName())
-//                    .commit();
+
             fragmentManager.beginTransaction()
                 .add(R.id.container, robotStateFragment, robotStateFragment.getClass().getSimpleName())
                 .add(R.id.container, controlFragment, controlFragment.getClass().getSimpleName())
@@ -111,7 +105,6 @@ public class MainActivity extends AppCompatActivity {
             fragmentManager = getSupportFragmentManager();
             robotStateFragment = (RobotStateFragment) fragmentManager.findFragmentByTag(RobotStateFragment.class.getSimpleName());
             controlFragment = (ControlFragment) fragmentManager.findFragmentByTag(ControlFragment.class.getSimpleName());
-//            userFragment = (UserFragment) fragmentManager.findFragmentByTag(UserFragment.class.getSimpleName());
             selectedNavItem = savedInstanceState.getInt(KEY_NAV_ITEM);
             switch (selectedNavItem) {
                 case 0:

@@ -21,16 +21,16 @@ package cn.iscas.xlab.uxbot;
 
 public class Config {
 
+    //标记ROS服务端是否连接成功
     public static boolean isRosServerConnected = false;
 
+    //Ros服务器IP
     public static String ROS_SERVER_IP = "192.168.0.135";
 
+    //ROS服务端的端口
     public static final String ROS_SERVER_PORT = "9090";
 
-    public static final String RECOGNITION_SERVER_IP = "192.168.0.135";
-
-    public static final String RECOGNITION_SERVER_PORT = "8000";
-
+    //控制Xbot进行移动的速度
     public static double speed = 0.3;
 
 }
