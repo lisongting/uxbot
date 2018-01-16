@@ -313,10 +313,10 @@ public class RosConnectionService extends Service {
             if (currentTime - lastUpdateStateTime > 5000) {
                 try {
                     JSONObject responseObj = new JSONObject(response);
-                    int powerPercent = responseObj.getInt("power_percent");
-                    int heightPercent = responseObj.getInt("height_percent");
-                    int cloudDegree = responseObj.getInt("cloud_degree");
-                    int cameraDegree = responseObj.getInt("camera_degree");
+                    int powerPercent = responseObj.optInt("power_percent");
+                    int heightPercent = responseObj.optInt("height_percent");
+                    int cloudDegree = responseObj.optInt("cloud_degree");
+                    int cameraDegree = responseObj.optInt("camera_degree");
 
                     EventBus.getDefault().post(new RobotState(powerPercent, heightPercent, cloudDegree, cameraDegree));
                 } catch (JSONException e) {
