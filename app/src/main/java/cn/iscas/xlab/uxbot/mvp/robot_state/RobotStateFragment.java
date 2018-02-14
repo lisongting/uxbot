@@ -15,6 +15,7 @@
  */
 package cn.iscas.xlab.uxbot.mvp.robot_state;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -46,6 +47,7 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
     private RobotStateContract.Presenter presenter;
     private Switch switcher;
     private Button btReset;
+    private Button btThreeDimension;
 
     public RobotStateFragment() {
 
@@ -60,7 +62,7 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
         cameraDegreeSeekBar =  view.findViewById(R.id.seekbar_camera_degree);
         switcher =  view.findViewById(R.id.switcher);
         btReset = view.findViewById(R.id.bt_reset);
-
+        btThreeDimension = view.findViewById(R.id.bt_three_dimension);
         initListeners();
 
         return view;
@@ -134,6 +136,12 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
                 switcher.setChecked(true);
                 cameraDegreeSeekBar.setValue(0);
                 cloudDegreeSeekBar.setValue(0);
+            }
+        });
+        btThreeDimension.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), RobotActivity.class));
             }
         });
 

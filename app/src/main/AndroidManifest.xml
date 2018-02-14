@@ -26,6 +26,7 @@
         <activity android:name=".mvp.control.FullScreenVideoActivity"
             android:screenOrientation="landscape"/>
         <service android:name=".RosConnectionService" />
+        <activity android:name=".mvp.robot_state.RobotActivity" />
     </application>
 
 </manifest>
