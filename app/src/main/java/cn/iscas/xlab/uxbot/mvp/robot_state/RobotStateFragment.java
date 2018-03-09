@@ -63,6 +63,8 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
         switcher =  view.findViewById(R.id.switcher);
         btReset = view.findViewById(R.id.bt_reset);
         btThreeDimension = view.findViewById(R.id.bt_three_dimension);
+
+        btThreeDimension.setVisibility(View.GONE);
         initListeners();
 
         return view;

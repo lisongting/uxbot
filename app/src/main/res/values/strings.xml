@@ -14,7 +14,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-    <string name="app_name">Xbot助手</string>
+    <string name="app_name">UXbot助手</string>
 
     <string name="key_broadcast_ros_connection">ros_conn_status</string>
 
