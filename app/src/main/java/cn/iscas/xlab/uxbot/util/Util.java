@@ -1,9 +1,11 @@
 package cn.iscas.xlab.uxbot.util;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.Size;
+import android.view.Display;
 import android.view.WindowManager;
 
 import java.io.UnsupportedEncodingException;
@@ -106,6 +108,19 @@ public class Util {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         manager.getDefaultDisplay().getMetrics(displayMetrics);
         return displayMetrics.heightPixels > 2000;
+    }
+
+    public static boolean isPotrait(Context context) {
+        return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+    }
+
+    public static DisplayMetrics getScreenInfo(Context context) {
+        WindowManager manager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = manager.getDefaultDisplay();
+        DisplayMetrics metrics = new DisplayMetrics();
+        display.getMetrics(metrics);
+
+        return metrics;
     }
 
 }

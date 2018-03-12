@@ -75,7 +75,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         log("onCreate()");
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.activity_main);
+
+        if (Util.isPotrait(this)) {
+            setContentView(R.layout.activity_main_portrait);
+        } else {
+            setContentView(R.layout.activity_main_landscape);
+        }
         bottomNavigationView = (BottomNavigationView) findViewById(R.id.bottom_navigation);
         pageTitle = (TextView) findViewById(R.id.page_title);
         settingButton = (ImageButton) findViewById(R.id.setting_button);
@@ -255,6 +260,7 @@ public class MainActivity extends AppCompatActivity {
         super.onDestroy();
         unregisterReceiver(receiver);
     }
+
 
     private void log(String s) {
         Log.i(TAG, TAG + " -- " + s);

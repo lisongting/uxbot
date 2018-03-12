@@ -21,6 +21,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.SurfaceView;
@@ -44,6 +45,7 @@ import cn.iscas.xlab.uxbot.Constant;
 import cn.iscas.xlab.uxbot.R;
 import cn.iscas.xlab.uxbot.customview.RockerView;
 import cn.iscas.xlab.uxbot.entity.Twist;
+import cn.iscas.xlab.uxbot.util.Util;
 import tv.danmaku.ijk.media.player.IMediaPlayer;
 import tv.danmaku.ijk.media.player.IjkMediaPlayer;
 
@@ -61,6 +63,7 @@ public class ControlFragment extends Fragment implements ControlContract.View {
     private ImageView infoImage;
     private TextView infoText;
     private TextView title;
+    private RelativeLayout relativeLayout;
 
     private ControlContract.Presenter presenter;
     private String[] videoList = {"彩色图像","深度图像"};
@@ -76,6 +79,8 @@ public class ControlFragment extends Fragment implements ControlContract.View {
     private String rtmpAddress;
     private Handler handler;
     private String videoTitle ;
+    //视频的比例
+    private final float scale = 640f / 480f;
 
     //用于隐藏菜单
     private static final int MSG_FLAG_HIDEN_MENU = 1;
@@ -107,7 +112,7 @@ public class ControlFragment extends Fragment implements ControlContract.View {
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_control, null);
+        View v = inflater.inflate(R.layout.fragment_control_landscape, null);
         surfaceView = (SurfaceView) v.findViewById(R.id.sv_video);
         topBar = (RelativeLayout) v.findViewById(R.id.top_bar);
         bottomBar = (RelativeLayout) v.findViewById(R.id.bottom_bar);
@@ -118,6 +123,7 @@ public class ControlFragment extends Fragment implements ControlContract.View {
         infoImage = (ImageView)v.findViewById(R.id.info_image);
         infoText = (TextView) v.findViewById(R.id.info_text);
         title = (TextView) v.findViewById(R.id.tv_title);
+        relativeLayout = (RelativeLayout) v.findViewById(R.id.view_parent);
 
         initView();
         return v;
@@ -128,6 +134,29 @@ public class ControlFragment extends Fragment implements ControlContract.View {
     public void initView() {
         waitAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.watting_anim);
         waitAnimation.setInterpolator(new LinearInterpolator());
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) relativeLayout.getLayoutParams();
+
+        DisplayMetrics metrics = Util.getScreenInfo(getContext());
+        log(metrics.toString());
+        int small = metrics.widthPixels > metrics.heightPixels ? metrics.heightPixels : metrics.widthPixels;
+        params.width = (int) (small*0.6 * scale);
+        params.height = (int) (small*0.6);
+        params.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        relativeLayout.setLayoutParams(params);
+
+        RelativeLayout.LayoutParams params2 = (RelativeLayout.LayoutParams) topBar.getLayoutParams();
+        params2.width = (int) (small*0.6 * scale);
+        params2.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        topBar.setLayoutParams(params2);
+
+        RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) bottomBar.getLayoutParams();
+        params3.width = (int) (small * 0.6 * scale);
+        params3.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        bottomBar.setLayoutParams(params3);
+
+        log("size:" + params.width + "x" + params.height);
+        log("size:" + params2.width + "x" + params2.height);
+        log("size:" + params3.width + "x" + params3.height);
 
     }
 

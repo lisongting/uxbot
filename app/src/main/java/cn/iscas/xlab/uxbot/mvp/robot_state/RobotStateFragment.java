@@ -56,7 +56,7 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_robot_state, container, false);
+        View view = inflater.inflate(R.layout.fragment_robot_state_landscape, container, false);
         batteryView = view.findViewById(R.id.battery_view);
         cloudDegreeSeekBar =  view.findViewById(R.id.seekbar_cloud_degree);
         cameraDegreeSeekBar =  view.findViewById(R.id.seekbar_camera_degree);

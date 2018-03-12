@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2017 lisongting
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <cn.iscas.xlab.uxbot.customview.PercentCircleView
+        android:id="@+id/battery_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        app:radius="80dp"
+        app:normal_state_color="@color/colorPrimary"
+        app:mid_state_color="#ff8f00"
+        app:low_state_color="#c62828"
+        app:stroke_size="3dp"
+        app:stroke_color="@color/colorPrimary"
+        app:text_size="30sp"
+        app:text_color="@android:color/white"
+        />
+
+    <View
+        android:id="@+id/divider1"
+        android:layout_width="1dp"
+        android:layout_height="200dp"
+        android:background="#eeeeee"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@id/battery_view"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_toEndOf="@id/divider1"
+        android:layout_centerVertical="true"
+        >
+        <RelativeLayout
+            android:id="@+id/layout_item1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="30dp"
+            >
+            <TextView
+                android:id="@+id/electric_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/colorStatePageText"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="28dp"
+                android:text="电机电源"/>
+            <Switch
+                android:id="@+id/switcher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/electric_text"
+                android:layout_centerHorizontal="true"
+                android:theme="@style/SwitcherTheme"
+                android:checked="true"
+                />
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/layout_item2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_item1"
+            android:paddingStart="30dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/cloud_degree_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="云台角度"
+                android:layout_centerVertical="true"
+                android:textSize="14sp"
+                android:textColor="@color/colorStatePageText"
+                />
+
+            <cn.iscas.xlab.uxbot.customview.CustomSeekBar
+                android:id="@+id/seekbar_cloud_degree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_toEndOf="@id/cloud_degree_txt"
+                android:paddingLeft="25dp"
+                app:is_horizontal="true"
+                app:track_length="200dp"
+                app:track_width="5dp"
+                app:track_color="@color/colorPrimary"
+                app:indicator_radius="9dp"
+                app:indicator_color="@color/colorLightPink"
+                app:bubble_color="@color/colorPrimary"
+                app:bubble_height="20dp"
+                app:bubble_width="30dp"
+                app:bubble_text_size="12sp"
+                app:bubble_text_color="@color/colorLightPink"
+                app:min_value="-90"
+                app:max_value="90"
+                app:value_text_size="14sp"
+                app:value_text_color="@color/colorStatePageText"/>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/layout_item3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/layout_item2"
+            android:paddingStart="30dp"
+            android:paddingTop="6dp"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/camera_degree_txt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="摄像头角度"
+                android:layout_centerVertical="true"
+                android:textSize="14sp"
+                android:textColor="@color/colorStatePageText"
+                />
+
+            <cn.iscas.xlab.uxbot.customview.CustomSeekBar
+                android:id="@+id/seekbar_camera_degree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_toEndOf="@id/camera_degree_txt"
+                android:paddingLeft="10dp"
+                app:is_horizontal="true"
+                app:track_length="200dp"
+                app:track_width="5dp"
+                app:track_color="@color/colorPrimary"
+                app:indicator_radius="9dp"
+                app:indicator_color="@color/colorLightPink"
+                app:bubble_color="@color/colorPrimary"
+                app:bubble_height="20dp"
+                app:bubble_width="30dp"
+                app:bubble_text_size="12sp"
+                app:bubble_text_color="@color/colorLightPink"
+                app:min_value="-45"
+                app:max_value="45"
+                app:value_text_size="14sp"
+                app:value_text_color="@color/colorStatePageText"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/bt_reset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="重置"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:textSize="14sp"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bt_background"
+        />
+
+    <Button
+        android:id="@+id/bt_three_dimension"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="三维视图"
+        android:layout_marginLeft="20dp"
+        android:textSize="20sp"
+        android:layout_above="@id/bt_reset"
+        android:background="@drawable/bt_background"
+        />
+
+
+</RelativeLayout>
