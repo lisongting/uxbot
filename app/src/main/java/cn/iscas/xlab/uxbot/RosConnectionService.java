@@ -34,8 +34,11 @@ import org.json.JSONObject;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import cn.iscas.xlab.uxbot.entity.PitchPlatformDegree;
+import cn.iscas.xlab.uxbot.entity.PowerPercent;
 import cn.iscas.xlab.uxbot.entity.RobotState;
 import cn.iscas.xlab.uxbot.entity.Twist;
+import cn.iscas.xlab.uxbot.entity.YawPlatformDegree;
 import de.greenrobot.event.EventBus;
 
 /**
@@ -150,39 +153,39 @@ public class RosConnectionService extends Service {
 //            //Log.v(TAG, "publish "+Constant.PUBLISH_TOPIC_CMD_LIFT+" to Ros Server :\n" + body.toString());
 //        }
 
-        /**
-         * 发布Message控制云台旋转角度和摄像头角度
-         * @param cloudDegree  云台角度
-         * @param cameraDegree 摄像头角度
-         */
-        public void sendCloudCameraMsg(int cloudDegree, int cameraDegree){
-            JSONObject msg = new JSONObject();
-            JSONObject body = new JSONObject();
-            try {
-                msg.put("cloud_degree", cloudDegree);
-                msg.put("camera_degree", cameraDegree);
-                body.put("op", "publish");
-                body.put("topic", Constant.PUBLISH_TOPIC_CMD_CLOUD_CAMERA);
-                body.put("msg", msg);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            rosBridgeClient.send(body.toString());
-            //Log.v(TAG, "publish "+Constant.PUBLISH_TOPIC_CMD_CLOUD_CAMERA+" to Ros Server :\n" + body.toString());
-        }
+//        /**
+//         * 发布Message控制云台旋转角度和摄像头角度
+//         * @param cloudDegree  云台角度
+//         * @param cameraDegree 摄像头角度
+//         */
+//        public void sendCloudCameraMsg(int cloudDegree, int cameraDegree){
+//            JSONObject msg = new JSONObject();
+//            JSONObject body = new JSONObject();
+//            try {
+//                msg.put("cloud_degree", cloudDegree);
+//                msg.put("camera_degree", cameraDegree);
+//                body.put("op", "publish");
+//                body.put("topic", Constant.PUBLISH_TOPIC_CMD_CLOUD_CAMERA);
+//                body.put("msg", msg);
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+//            rosBridgeClient.send(body.toString());
+//            //Log.v(TAG, "publish "+Constant.PUBLISH_TOPIC_CMD_CLOUD_CAMERA+" to Ros Server :\n" + body.toString());
+//        }
 
         /**
          * 发布Message控制电机电源开关
-         * @param activate true 表示打开电源，false表示关闭
+         * @param isDisable true 表示打开电源，false表示关闭
          */
-        public void sendElectricMachineryMsg(boolean activate) {
+        public void sendElectricMachineryMsg(boolean isDisable) {
             JSONObject msg = new JSONObject();
             JSONObject body = new JSONObject();
             try {
-                if (activate) {
-                    msg.put("power", true);
+                if (isDisable) {
+                    msg.put("data", true);
                 } else {
-                    msg.put("power", false);
+                    msg.put("data", false);
                 }
                 body.put("op", "publish");
                 body.put("topic", Constant.PUBLISH_TOPIC_CMD_MACHINERY_POWER);
@@ -192,7 +195,46 @@ public class RosConnectionService extends Service {
             }
             rosBridgeClient.send(body.toString());
             //Log.v(TAG, "publish "+Constant.PUBLISH_TOPIC_CMD_MACHINERY_POWER+" to Ros Server :\n" + body.toString());
+        }
 
+        public void sendYawPlatformDegree(int degree) {
+            JSONObject msg = new JSONObject();
+            JSONObject body = new JSONObject();
+            try {
+                msg.put("data", degree);
+                body.put("op", "publish");
+                body.put("topic", Constant.PUBLISH_TOPIC_YAW_PLATFORM);
+                body.put("msg", msg);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            rosBridgeClient.send(body.toString());
+        }
+
+        public void sendPitchPlatformDegree(int degree) {
+            JSONObject msg = new JSONObject();
+            JSONObject body = new JSONObject();
+            try {
+                msg.put("data", degree);
+                body.put("op", "publish");
+                body.put("topic", Constant.PUBLISH_TOPIC_PITCH_PLATFORM);
+                body.put("msg", msg);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            rosBridgeClient.send(body.toString());
+        }
+
+        public void advertise(String topicName, String messageType) {
+            JSONObject advertiseMsg = new JSONObject();
+            try {
+                advertiseMsg.put("op", "advertise");
+                advertiseMsg.put("topic", topicName);
+                advertiseMsg.put("type", messageType);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            rosBridgeClient.send(advertiseMsg.toString());
         }
 
         public void disConnect() {
@@ -288,6 +330,7 @@ public class RosConnectionService extends Service {
 
     //订阅某个topic后，接收到Ros服务器返回的message，回调此方法
     public void onEvent(PublishEvent event) {
+        Log.v(TAG, "onEvent:" + event.msg);
         //topic的名称
         String topicName = event.name;
         if (event.msg.length() < 500) {
@@ -323,6 +366,30 @@ public class RosConnectionService extends Service {
 //                    e.printStackTrace();
                 }
                 lastUpdateStateTime = currentTime;
+            }
+        } else if (topicName.equals(Constant.SUBSCRIBE_TOPIC_BATTERY_PERCENT)) {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                int powerPercent = jsonObject.optInt("battery_percent");
+                EventBus.getDefault().post(new PowerPercent(powerPercent));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else if (topicName.equals(Constant.SUBSCRIBE_TOPIC_YAW_PLATFORM_STATE)) {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                int degree = jsonObject.optInt("data");
+                EventBus.getDefault().post(new YawPlatformDegree(degree));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        } else if (topicName.equals(Constant.SUBSCRIBE_TOPIC_PITCH_PLATFORM_STATE)) {
+            try {
+                JSONObject jsonObject = new JSONObject(response);
+                int degree = jsonObject.optInt("data");
+                EventBus.getDefault().post(new PitchPlatformDegree(degree));
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
 

@@ -25,7 +25,7 @@ public class Config {
     public static boolean isRosServerConnected = false;
 
     //Ros服务器IP
-    public static String ROS_SERVER_IP = "192.168.0.135";
+    public static String ROS_SERVER_IP = "192.168.8.101";
 
     //ROS服务端的端口
     public static final String ROS_SERVER_PORT = "9090";

@@ -18,7 +18,6 @@ package cn.iscas.xlab.uxbot.mvp.robot_state;
 import android.os.Binder;
 import android.support.annotation.NonNull;
 
-import cn.iscas.xlab.uxbot.entity.RobotState;
 import cn.iscas.xlab.uxbot.mvp.BasePresenter;
 import cn.iscas.xlab.uxbot.mvp.BaseView;
 
@@ -37,9 +36,13 @@ public interface RobotStateContract {
 
         void unSubscribeRobotState();
 
-        void publishCloudCameraMsg(int cloudDegree, int cameraDegree);
+//        void publishCloudCameraMsg(int cloudDegree, int cameraDegree);
 
-        void publishElectricMachineryMsg(boolean activate);
+        void publishElectricMachineryMsg(boolean isDisable);
+
+        void publishYawPlatFormMsg(int degree);
+
+        void publishPitchPlatFormMsg(int degree);
 
         void destroy();
 
@@ -48,7 +51,13 @@ public interface RobotStateContract {
 
 
     interface View extends BaseView<Presenter> {
-        void updateRobotState(RobotState state);
+//        void updateRobotState(RobotState state);
+
+        void updateYawPlatForm(int degree);
+
+        void updatePitchPlatForm(int degree);
+
+        void updateBattery(int percent);
 
     }
 }

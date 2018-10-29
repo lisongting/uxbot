@@ -71,7 +71,7 @@ public class CustomSeekBar extends View {
 
     private float centerX,centerY;
     private float trackLeft,trackRight,trackTop,trackBottom;
-    private boolean isIndicatorDragged = false;
+    private volatile boolean isIndicatorDragged = false;
 
     /**
      * 进度变化的监听器
@@ -547,12 +547,17 @@ public class CustomSeekBar extends View {
         int gap = maxValue - minValue;
         int result;
         if (isHorizontal) {
-            result = (realValue - minValue) * 100 / gap;
+            result = Math.round((realValue - minValue) * 100 / gap);
+
         } else {
-            result = (maxValue - realValue ) *100/ gap;
+            result = Math.round((maxValue - realValue ) *100/ gap);
         }
 
         return result;
+    }
+
+    public synchronized boolean isIndicatorDragged(){
+        return isIndicatorDragged;
     }
 
     private void log(String s) {

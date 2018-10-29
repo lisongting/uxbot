@@ -34,8 +34,8 @@ import cn.iscas.xlab.uxbot.util.RegexCheckUtil;
 public class RosIpPreference extends DialogPreference {
     
     public static final String TAG = "RosIpPreference";
-    //初始值：添加10.0.0.0和192.168.0.135
-    public static final String INIT_HISTORY = "192.168.0.135_10.0.0.0";
+    //初始值
+    public static final String INIT_HISTORY = "192.168.8.101_10.0.0.0";
     public static final String KEY_ROS_HISTORY = "ros_history";
     public String SP_KEY_ROS_SERVER ;
     

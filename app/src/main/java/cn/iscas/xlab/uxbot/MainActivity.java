@@ -134,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initConfiguration() {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
-        Config.ROS_SERVER_IP = sp.getString(getResources().getString(R.string.pref_key_ros_server_ip), "192.168.0.135");
+        Config.ROS_SERVER_IP = sp.getString(getResources().getString(R.string.pref_key_ros_server_ip), "192.168.8.101");
         Config.speed = sp.getInt(getResources().getString(R.string.pref_key_speed), 30) / 100.0;
         log("初始设置：" + Config.ROS_SERVER_IP + " ," + Config.speed);
     }

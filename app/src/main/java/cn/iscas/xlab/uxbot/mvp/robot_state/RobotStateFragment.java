@@ -31,7 +31,6 @@ import cn.iscas.xlab.uxbot.Config;
 import cn.iscas.xlab.uxbot.R;
 import cn.iscas.xlab.uxbot.customview.CustomSeekBar;
 import cn.iscas.xlab.uxbot.customview.PercentCircleView;
-import cn.iscas.xlab.uxbot.entity.RobotState;
 
 
 /**
@@ -42,8 +41,8 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
     private static final String TAG = "RobotStateFragment";
 
     private PercentCircleView batteryView;
-    private CustomSeekBar cloudDegreeSeekBar;
-    private CustomSeekBar cameraDegreeSeekBar;
+    private CustomSeekBar yawDegreeSeekBar;
+    private CustomSeekBar pitchDegreeSeekBar;
     private RobotStateContract.Presenter presenter;
     private Switch switcher;
     private Button btReset;
@@ -58,8 +57,8 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_robot_state, container, false);
         batteryView = view.findViewById(R.id.battery_view);
-        cloudDegreeSeekBar =  view.findViewById(R.id.seekbar_cloud_degree);
-        cameraDegreeSeekBar =  view.findViewById(R.id.seekbar_camera_degree);
+        yawDegreeSeekBar =  view.findViewById(R.id.seekbar_yaw_cloud_degree);
+        pitchDegreeSeekBar =  view.findViewById(R.id.seekbar_pitch_cloud_degree);
         switcher =  view.findViewById(R.id.switcher);
         btReset = view.findViewById(R.id.bt_reset);
         btThreeDimension = view.findViewById(R.id.bt_three_dimension);
@@ -77,6 +76,7 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
         } else {
             batteryView.stopAnimation();
         }
+        pitchDegreeSeekBar.setValue(1);
     }
 
     private void initListeners() {
@@ -85,7 +85,7 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
             public void onClick(View v) {
 
                 if (presenter!=null && Config.isRosServerConnected) {
-                    if (switcher.isChecked()) {
+                    if (!switcher.isChecked()) {
                         presenter.publishElectricMachineryMsg(true);
                     } else {
                         presenter.publishElectricMachineryMsg(false);
@@ -96,32 +96,32 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
             }
         });
 
-        cloudDegreeSeekBar.setOnSeekChangeListener(new CustomSeekBar.OnProgressChangeListener() {
+        yawDegreeSeekBar.setOnSeekChangeListener(new CustomSeekBar.OnProgressChangeListener() {
             @Override
             public void onProgressChanged(int value) {
             }
 
             @Override
             public void onProgressChangeCompleted(int value) {
-                log("cloudDegreeSeekBar value change complete :" + value);
+                log("yawDegreeSeekBar value change complete :" + value);
                 if (presenter != null && Config.isRosServerConnected ) {
-                    presenter.publishCloudCameraMsg(value,  cameraDegreeSeekBar.getRealValue());
+                    presenter.publishYawPlatFormMsg(value);
                 }else {
                     Toast.makeText(getActivity(), "Ros服务器未连接", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
-        cameraDegreeSeekBar.setOnSeekChangeListener(new CustomSeekBar.OnProgressChangeListener() {
+        pitchDegreeSeekBar.setOnSeekChangeListener(new CustomSeekBar.OnProgressChangeListener() {
             @Override
             public void onProgressChanged(int value) {
             }
 
             @Override
             public void onProgressChangeCompleted(int value) {
-                log("cameraDegreeSeekBar value change complete:" + value);
+                log("pitchDegreeSeekBar value change complete:" + value);
                 if (presenter != null && Config.isRosServerConnected ) {
-                    presenter.publishCloudCameraMsg(cloudDegreeSeekBar.getRealValue(),value);
+                    presenter.publishPitchPlatFormMsg(value);
                 }else {
                     Toast.makeText(getContext(), "Ros服务器未连接", Toast.LENGTH_SHORT).show();
                 }
@@ -136,8 +136,8 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
                     presenter.reset();
                 }
                 switcher.setChecked(true);
-                cameraDegreeSeekBar.setValue(0);
-                cloudDegreeSeekBar.setValue(0);
+                pitchDegreeSeekBar.setValue(1);
+                yawDegreeSeekBar.setValue(0);
             }
         });
         btThreeDimension.setOnClickListener(new View.OnClickListener() {
@@ -192,18 +192,36 @@ public class RobotStateFragment extends Fragment implements RobotStateContract.V
     }
 
     @Override
-    public void updateRobotState( RobotState state) {
-        final int percent = state.getPowerPercent();
-        final int cloudDegree = state.getCloudDegree();
-        final int cameraDegree = state.getCameraDegree();
+    public void updateYawPlatForm(final int degree) {
+        if (yawDegreeSeekBar.isIndicatorDragged()) {
+            return;
+        }
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                batteryView.setPercent(percent);
-                cloudDegreeSeekBar.setValue(cloudDegree);
-                cameraDegreeSeekBar.setValue(cameraDegree);
+                yawDegreeSeekBar.setValue(degree);
+
             }
         });
+    }
+
+    @Override
+    public void updatePitchPlatForm(final int degree) {
+        if (pitchDegreeSeekBar.isIndicatorDragged()) {
+            return;
+        }
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                pitchDegreeSeekBar.setValue(degree);
+
+            }
+        });
+    }
+
+    @Override
+    public void updateBattery(int percent) {
+        batteryView.setPercent(percent);
     }
 
     @Override

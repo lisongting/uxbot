@@ -22,8 +22,11 @@ import android.util.Log;
 
 import cn.iscas.xlab.uxbot.Constant;
 import cn.iscas.xlab.uxbot.RosConnectionService;
-import cn.iscas.xlab.uxbot.entity.RobotState;
+import cn.iscas.xlab.uxbot.entity.PitchPlatformDegree;
+import cn.iscas.xlab.uxbot.entity.PowerPercent;
+import cn.iscas.xlab.uxbot.entity.YawPlatformDegree;
 import de.greenrobot.event.EventBus;
+
 
 /**
  * Created by lisongting on 2017/11/14.
@@ -55,7 +58,15 @@ public class RobotStatePresenter implements RobotStateContract.Presenter {
             Log.e(TAG,"serviceProxy is null");
             return;
         }
-        serviceProxy.manipulateTopic(Constant.SUBSCRIBE_TOPIC_ROBOT_STATE, true);
+//        serviceProxy.manipulateTopic(Constant.SUBSCRIBE_TOPIC_ROBOT_STATE, true);
+        serviceProxy.advertise(Constant.PUBLISH_TOPIC_CMD_MACHINERY_POWER,"std_msgs/Bool");
+        serviceProxy.advertise(Constant.PUBLISH_TOPIC_PITCH_PLATFORM,"std_msgs/Int8");
+        serviceProxy.advertise(Constant.PUBLISH_TOPIC_YAW_PLATFORM,"std_msgs/Int8");
+        serviceProxy.advertise(Constant.SUBSCRIBE_TOPIC_YAW_PLATFORM_STATE,"std_msgs/Int8");
+        serviceProxy.advertise(Constant.SUBSCRIBE_TOPIC_PITCH_PLATFORM_STATE,"std_msgs/Int8");
+        serviceProxy.manipulateTopic(Constant.SUBSCRIBE_TOPIC_BATTERY_PERCENT, true);
+        serviceProxy.manipulateTopic(Constant.SUBSCRIBE_TOPIC_YAW_PLATFORM_STATE, true);
+        serviceProxy.manipulateTopic(Constant.SUBSCRIBE_TOPIC_PITCH_PLATFORM_STATE, true);
     }
 
     @Override
@@ -64,39 +75,70 @@ public class RobotStatePresenter implements RobotStateContract.Presenter {
             Log.e(TAG,"serviceProxy is null");
             return;
         }
-        serviceProxy.manipulateTopic(Constant.SUBSCRIBE_TOPIC_ROBOT_STATE,false);
+//        serviceProxy.manipulateTopic(Constant.SUBSCRIBE_TOPIC_ROBOT_STATE,false);
+        serviceProxy.manipulateTopic(Constant.SUBSCRIBE_TOPIC_BATTERY_PERCENT, false);
+        serviceProxy.manipulateTopic(Constant.SUBSCRIBE_TOPIC_YAW_PLATFORM_STATE, false);
+        serviceProxy.manipulateTopic(Constant.SUBSCRIBE_TOPIC_PITCH_PLATFORM_STATE, false);
     }
 
+//    @Override
+//    public void publishCloudCameraMsg(int cloudDegree, int cameraDegree) {
+//        if (serviceProxy == null) {
+//            Log.e(TAG,"serviceProxy is null");
+//            return;
+//        }
+//        serviceProxy.sendCloudCameraMsg(cloudDegree, cameraDegree);
+//    }
+
     @Override
-    public void publishCloudCameraMsg(int cloudDegree, int cameraDegree) {
+    public void publishElectricMachineryMsg(boolean isDisable) {
         if (serviceProxy == null) {
             Log.e(TAG,"serviceProxy is null");
             return;
         }
-        serviceProxy.sendCloudCameraMsg(cloudDegree, cameraDegree);
+        serviceProxy.sendElectricMachineryMsg(isDisable);
     }
 
     @Override
-    public void publishElectricMachineryMsg(boolean activate) {
+    public void publishYawPlatFormMsg(int degree) {
         if (serviceProxy == null) {
             Log.e(TAG,"serviceProxy is null");
             return;
         }
-        serviceProxy.sendElectricMachineryMsg(activate);
+        serviceProxy.sendYawPlatformDegree(degree);
+    }
+
+    @Override
+    public void publishPitchPlatFormMsg(int degree) {
+        if (serviceProxy == null) {
+            Log.e(TAG,"serviceProxy is null");
+            return;
+        }
+        serviceProxy.sendPitchPlatformDegree(degree);
     }
 
 
-    public void onEvent(RobotState robotState) {
-        view.updateRobotState(robotState);
-
+    public void onEvent(PowerPercent powerPercent) {
+        view.updateBattery(powerPercent.getValue());
     }
+
+    public void onEvent(PitchPlatformDegree degree) {
+        view.updatePitchPlatForm(degree.getValue());
+    }
+
+    public void onEvent(YawPlatformDegree degree) {
+        view.updateYawPlatForm(degree.getValue());
+    }
+
 
     public void reset() {
         if (serviceProxy == null) {
             Log.e(TAG,"serviceProxy is null");
             return;
         }
-        serviceProxy.sendCloudCameraMsg(0, 0);
+//        serviceProxy.sendCloudCameraMsg(0, 0);
+        serviceProxy.sendPitchPlatformDegree(0);
+        serviceProxy.sendYawPlatformDegree(0);
     }
 
     @Override
