@@ -142,7 +142,7 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
         initOnClickListeners();
         if (isPlaying) {
             showLoading();
-            rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
+            rtmpAddress = Constant.CAMERA_RGB_STREAM_PREFIX + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
             play(rtmpAddress);
         } else {
             btPlayState.setBackgroundResource(R.drawable.ic_play);
@@ -213,7 +213,7 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
             @Override
             public void onClick(View v) {
                 if (isLoadingFailed) {
-                    rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
+                    rtmpAddress = Constant.CAMERA_RGB_STREAM_PREFIX + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
                     play(rtmpAddress);
                     showLoading();
                     isLoadingFailed = false;
@@ -237,7 +237,7 @@ public class FullScreenVideoActivity extends AppCompatActivity implements Contro
                 } else {
                     //开始/恢复播放
                     showLoading();
-                    rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
+                    rtmpAddress = Constant.CAMERA_RGB_STREAM_PREFIX + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
                     play(rtmpAddress);
                 }
 

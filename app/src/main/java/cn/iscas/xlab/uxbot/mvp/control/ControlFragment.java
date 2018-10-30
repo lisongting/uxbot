@@ -76,6 +76,7 @@ public class ControlFragment extends Fragment implements ControlContract.View {
     private String rtmpAddress;
     private Handler handler;
     private String videoTitle ;
+    
 
     //用于隐藏菜单
     private static final int MSG_FLAG_HIDEN_MENU = 1;
@@ -171,7 +172,7 @@ public class ControlFragment extends Fragment implements ControlContract.View {
             @Override
             public void onClick(View v) {
                 if (isLoadingFailed) {
-                    rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
+                    rtmpAddress = Constant.CAMERA_RGB_STREAM_PREFIX + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
                     play(rtmpAddress);
                     showLoading();
                     isLoadingFailed = false;
@@ -194,7 +195,7 @@ public class ControlFragment extends Fragment implements ControlContract.View {
                 } else {
                     //开始/恢复播放
                     showLoading();
-                    rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
+                    rtmpAddress = Constant.CAMERA_RGB_STREAM_PREFIX + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
                     play(rtmpAddress);
                 }
 
@@ -290,7 +291,7 @@ public class ControlFragment extends Fragment implements ControlContract.View {
         }
         if (isPlaying) {
             showLoading();
-            rtmpAddress = "rtmp://" + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
+            rtmpAddress = Constant.CAMERA_RGB_STREAM_PREFIX + Config.ROS_SERVER_IP + Constant.CAMERA_RGB_RTMP_SUFFIX;
             play(rtmpAddress);
         } else {
             btPlayState.setBackgroundResource(R.drawable.ic_play);

@@ -51,5 +51,7 @@ public class Constant {
     //rgb图像的URL后缀
     public static final String CAMERA_RGB_RTMP_SUFFIX = ":8080/stream_viewer?topic=/camera/color/image_raw";
 
+    public static final String CAMERA_RGB_STREAM_PREFIX = "http://";
+
 
 }
